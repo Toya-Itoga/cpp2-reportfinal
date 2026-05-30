@@ -29,9 +29,27 @@
 ## サーバー起動
 - 開発サーバー(uvicorn): `python -m uvicorn src.main:app --reload`
 
-## テスト
-- 全テスト実行: `pytest tests/ -v`
-
 ## 仮想環境
 - 作成: `python3.12 -m venv .venv`
 - 有効化: `source .venv/bin/activate`
+
+## DynamoDB Local確認
+- テーブル一覧:
+  AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy \
+  aws dynamodb list-tables --endpoint-url http://localhost:5434 --region ap-northeast-1
+
+- テーブルスキャン:
+  AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy \
+  aws dynamodb scan --table-name テーブル名 --endpoint-url http://localhost:5434 --region ap-northeast-1
+
+- データ追加:
+  AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy \
+  aws dynamodb put-item --table-name テーブル名 --endpoint-url http://localhost:5434 --region ap-northeast-1 --item '{}'
+
+## パスワードハッシュ化
+- python -c "import bcrypt; print(bcrypt.hashpw('password'.encode(), bcrypt.gensalt()).decode())"
+
+## Lambdaレイヤー作成
+- mkdir -p layer/python
+- pip install -r requirements.txt -t ./layer/python --platform manylinux2014_x86_64 --only-binary=:all: --python-version 3.12
+- cd layer && zip -r ../layer.zip . && cd ..
