@@ -1,16 +1,16 @@
 # CLAUDE.md
 
 ## アーキテクチャ
-- 
+- レイヤードアーキテクチャ
 
 ## レンダリング方式
-- 
+- サーバーサイドレンダリング
 
 ## ディレクトリ・ファイル構成
 - `.venv/`                - 仮想環境
-- `src/`                  - アプリ本体
-- `src/`
-- `src/`
+- `src/main.py`           - アプリ本体
+- `src/routers/`          - ルータ層
+- `src/services/`         - サービス層
 - `src/`
 - `src/`
 - `src/`
@@ -18,6 +18,7 @@
 - `src/`
 - `config/`               - 設定・ドキュメント
 - `scripts/`              - 開発補助スクリプト
+- `scripts/setup_local_db.py`
 - `tests/`                - テストコード
 - `.claude/commands/`     - コマンド
 - `.claude/agents/`       - サブエージェント定義
@@ -52,6 +53,11 @@
 - AIが間違った動作をしたらここに反映すること
 
 ## 技術スタック
-- 
+- Python3.12
+- FastAPI
+- Jinja2
+- uvicorn
+- boto3
+- Pydantic
 - 
 - 
