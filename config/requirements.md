@@ -1,7 +1,7 @@
 # requirements.md
 
 ## アプリ概要
-- アプリ名: FieldSync
+- アプリ名: Gemba One
 - 概要: 零細・中小の配管業・設備工事業向けクラウド型作業指示・進捗管理サービス。
   社長（admin）がタスクを登録し、従業員（employee）はスマホで自分のタスクを確認・完了報告できる。
 
@@ -47,10 +47,70 @@
 - 操作: 従業員の追加・編集・削除、パスワード変更
 - 備考: 左側に固定メニューバー
 
+## ビジネスロジック
+
+### 認証・認可
+- ログイン時にusername・passwordを受け取り、Userテーブルから該当ユーザーを取得
+- bcryptでパスワードを検証し、成功時はJWT（有効期限6時間）を発行
+- JWTのpayloadにはusername・role・nameを含める
+- 全エンドポイントでJWTを検証し、未認証の場合はログイン画面にリダイレクト
+- ロールに応じてアクセス制御：adminのみアクセス可能なエンドポイントはrole=adminを検証
+
+### ログイン後の遷移
+- role=admin → ダッシュボード画面（/dashboard）
+- role=employee → タスク一覧画面（/tasks）
+
+### タスク一覧のフィルタリング
+- adminはTaskテーブルを全件スキャンして全タスクを表示
+- employeeはSK=自分のusernameでQueryして自分のタスクのみ表示
+
+### ダッシュボードの集計（adminのみ）
+- 全タスクを取得し、scheduled_date=今日でフィルタリング
+- ステータス別に集計して表示
+  - 完了予定タスク数：scheduled_date=今日の全タスク数
+  - 完了済み：status=completedのタスク数
+  - 未完了：status=pending / in_progressのタスク数
+- 従業員ごとにグルーピングしてカード形式で表示
+
+### タスクのステータス管理
+- タスク作成時のデフォルトステータスはpending
+- 「完了」ボタン押下 → 確認ダイアログ → 確認でstatus=completedに更新
+- ステータスの遷移：pending → in_progress → completed
+- 完了済みタスクは編集・完了操作不可
+
+### ユーザー管理（adminのみ）
+- 従業員の追加：username・name・role=employeeで新規ユーザーを作成
+- 初期パスワードはadminが設定し、従業員に別途通知
+- 従業員の削除：is_active=falseに更新（物理削除はしない）
+
 ## 非機能要件
 - パフォーマンス: 画面表示3秒以内
 - セキュリティ: JWT認証、ロールベースのアクセス制御（admin / employee）
 - 対応デバイス: スマートフォン（iOS・Android）・PC（Chrome最新版）
+
+## データ構造
+
+### Userテーブル
+- PK: username
+- attributes:
+  - user_id: UUID
+  - password_hash: bcryptハッシュ化済みパスワード
+  - role: admin / employee
+  - name: 表示名
+  - created_at: 作成日時（ISO8601）
+  - is_active: 有効フラグ（true / false）
+
+### Taskテーブル
+- PK: TASK#<task_id>
+- SK: assignee_id（担当者のusername）
+- attributes:
+  - title: 作業内容
+  - assignee_name: 担当者の表示名
+  - scheduled_date: 作業予定日（YYYY-MM-DD）
+  - status: pending / in_progress / completed
+  - created_by: 作成者のusername
+  - created_at: 作成日時（ISO8601）
+  - updated_at: 更新日時（ISO8601）
 
 ## 制約条件
 - バックエンド: AWS Lambda（FastAPI / SSR）
