@@ -74,7 +74,9 @@
 
 ### タスクのステータス管理
 - タスク作成時のデフォルトステータスはpending
-- 「完了」ボタン押下 → 確認ダイアログ → 確認でstatus=completedに更新
+- 「完了」ボタン押下 → 確認ダイアログ → 確認で以下を実行：
+  - 既存アイテム（TASK#<task_id>）を削除
+  - DONE#<task_id>として同内容を再登録（status=completed・updated_at更新）
 - ステータスの遷移：pending → in_progress → completed
 - 完了済みタスクは編集・完了操作不可
 
@@ -101,7 +103,7 @@
   - is_active: 有効フラグ（true / false）
 
 ### Taskテーブル
-- PK: TASK#<task_id>
+- PK: TASK#<task_id>（未完了）/ DONE#<task_id>（完了済） ※完了実行時にPKをTASK# → DONE#に付け替える（delete → put）
 - SK: assignee_id（担当者のusername）
 - attributes:
   - title: 作業内容
