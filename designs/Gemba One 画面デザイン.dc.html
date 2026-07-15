@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style data-omelette-injected>html,body{background:transparent}</style><script data-omelette-injected>(()=>{{const W=new URLSearchParams(location.search).get("theme");if(W==="light"||W==="dark"){document.documentElement.dataset.theme=W}}{const W=()=>{try{if(document.querySelector('meta[name="color-scheme"]'))return;const V=getComputedStyle(document.documentElement).getPropertyValue("color-scheme").trim();if(V&&V!=="normal")return;const z=(j)=>{if(!j)return null;const H=getComputedStyle(j).backgroundColor.match(/^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s/]+([\d.]+%?))?\s*\)$/);if(!H)return null;const F=H[4]==null?1:parseFloat(H[4])/(H[4].endsWith("%")?100:1);if(F<0.99)return null;return[+H[1],+H[2],+H[3]]};const G=z(document.body)||z(document.documentElement);if(!G)return;const K=(j)=>{const H=j/255;return H<=0.04045?H/12.92:((H+0.055)/1.055)**2.4};const D=0.2126*K(G[0])+0.7152*K(G[1])+0.0722*K(G[2]);document.documentElement.style.setProperty("color-scheme",D<0.4?"dark":"light")}catch{}};if(document.readyState==="complete")W();else window.addEventListener("load",W)}var b=[];var p=false;var O=30000;var n=3000;document.addEventListener("DOMContentLoaded",()=>{const W=window.Babel;const V="om-src-id";if(W&&W.registerPlugin&&!(W.availablePlugins&&W.availablePlugins[V])){W.registerPlugin(V,({types:D})=>({visitor:{JSXOpeningElement(j,H){const F=j.node;if(F.name&&F.name.type==="JSXMemberExpression")return;for(let Q=0;Q<F.attributes.length;Q++){const $=F.attributes[Q];if($.type==="JSXAttribute"&&$.name&&$.name.name==="data-om-id")return}const P=H.file&&H.file.opts&&H.file.opts.filename||"?";const R=F.loc&&F.loc.start;const J=`jsx:${P}:${F.start??0}:${R?R.line:0}:${R?R.column+1:0}`;F.attributes.push(D.jsxAttribute(D.jsxIdentifier("data-om-id"),D.stringLiteral(J)))}}}))}const z="om-text-extract";let G=false;if(p&&W&&W.registerPlugin&&!(W.availablePlugins&&W.availablePlugins[z])){const D=window.React;if(D&&D.useSyncExternalStore&&D.createElement){G=true;const j={};const H=new Set;let F=0;window.__omTextO=j;window.__omTextSet=(J)=>{for(const Q in J){const $=J[Q];if($==null)delete j[Q];else j[Q]=$}F++;H.forEach((Q)=>Q())};const P=(J)=>{H.add(J);return()=>H.delete(J)};const R=()=>F;window.__OmT=function J(Q){D.useSyncExternalStore(P,R,R);return D.createElement("span",{"data-om-text":Q.i,className:"__om-t"},Q.i in j?j[Q.i]:Q.children)};W.registerPlugin(z,({types:J})=>{const Q={style:1,script:1,noscript:1,textarea:1,title:1,option:1,text:1,tspan:1,textPath:1};const $={placeholder:1,alt:1,title:1,label:1,"aria-label":1,"aria-description":1,"aria-placeholder":1};const Y=(q,M)=>J.logicalExpression("??",J.memberExpression(J.logicalExpression("||",J.memberExpression(J.identifier("window"),J.identifier("__omTextO")),J.objectExpression([])),J.stringLiteral(q),true),M);const Z=(q)=>q.file&&q.file.opts&&q.file.opts.filename||"?";const B=(q)=>q.file&&q.file.code||"";const U=(q,M)=>{const L=(X)=>X&&X.start!=null&&X.end!=null&&(X.type==="StringLiteral"||X.type==="TemplateLiteral"&&X.expressions.length===0)?[X.start,X.end]:null;const N=L(M);if(N)return N;if(M&&M.type==="Identifier"){const X=q.scope.getBinding(M.name);if(X&&X.constant&&X.path.node.type==="VariableDeclarator"){return L(X.path.node.init)}}return null};const x=(q,M,L)=>{const N=q.node;let X=false;const f=(w,A)=>{X=true;return J.jsxElement(J.jsxOpeningElement(J.jsxIdentifier("__OmT"),[J.jsxAttribute(J.jsxIdentifier("i"),J.stringLiteral(w))],false),J.jsxClosingElement(J.jsxIdentifier("__OmT")),[A],false)};const C=N.children.map((w)=>{if(w.type==="JSXText"){if(w.start==null||w.end==null)return w;const A=L.slice(w.start,w.end);const k=A.length-A.trimStart().length;const u=A.length-A.trimEnd().length;if(k+u>=A.length)return w;return f(`txt:${M}:${w.start+k}:${w.end-u}`,w)}if(w.type==="JSXExpressionContainer"){const A=U(q,w.expression);if(A)return f(`str:${M}:${A[0]}:${A[1]}`,w)}return w});if(X)N.children=C};return{visitor:{JSXOpeningElement(q,M){const L=q.node;const N=Z(M);const X={};for(let f=0;f<L.attributes.length;f++){const C=L.attributes[f];if(C.type!=="JSXAttribute"||!C.name)continue;const w=C.name.name;if(!$[w])continue;if(!C.value||C.value.type!=="StringLiteral")continue;if(C.value.start==null||C.value.end==null)continue;const A=`txt:${N}:${C.value.start}:${C.value.end}`;X[w]=A;C.value=J.jsxExpressionContainer(Y(A,J.stringLiteral(C.value.value)))}if(Object.keys(X).length){L.attributes.push(J.jsxAttribute(J.jsxIdentifier("data-om-text-attrs"),J.stringLiteral(JSON.stringify(X))))}},JSXElement(q,M){const L=q.node.openingElement;const N=L&&L.name&&L.name.name;if(N==="__OmT")return;if(typeof N==="string"&&Q[N])return;x(q,Z(M),B(M))},JSXFragment(q,M){x(q,Z(M),B(M))}}}})}}const K=G?["transform-react-jsx-source",V,z]:["transform-react-jsx-source",V];document.querySelectorAll('script[type="text/babel"],script[type="text/jsx"]').forEach((D,j)=>{const H=D.getAttribute("data-plugins")||"";const F=K.filter((P)=>H.indexOf(P)<0);if(F.length){D.setAttribute("data-plugins",H?`${H},${F.join(",")}`:F.join(","))}if(!D.hasAttribute("data-filename")){D.setAttribute("data-filename",D.getAttribute("src")||`inline-${j}`)}})});var v=window.parent;var g="not editable here — open the project in the Claude Design editor to save";var d=()=>Promise.resolve({persisted:false,noHost:true,reason:g});var S=d;var h="data/storage.json";var i=()=>{try{const W=new URL(document.baseURI);const V=W.pathname.match(/\/projects\/([^/]+)\/serve\//);if(V)return V[1];return W.hostname.split(".")[0]||""}catch{return location.hostname.split(".")[0]||""}};var o=()=>{try{const W=new URL(document.baseURI);const V=W.pathname.indexOf("/serve/");if(V>=0)return W.origin+W.pathname.slice(0,V+"/serve/".length)+h}catch{}return"./"+h};var I=null;var _=()=>{if(!I){I=fetch(o(),{cache:"no-store"}).then((W)=>{if(W.ok)return W.text();return W.status===404?"":null}).catch(()=>null).then((W)=>{if(W===null){I=null;return null}const V=new Map;if(!W)return V;let z;try{z=JSON.parse(W)}catch{console.warn("[omelette.storage] "+h+" is not valid JSON; treating the store as unreadable so a save cannot overwrite the "+"hand-edited bytes. Fix the JSON (or delete the file) to re-enable persistence.");I=null;return null}if(z===null||typeof z!=="object"||Array.isArray(z)){console.warn("[omelette.storage] "+h+" doesn't hold a JSON object; treating the store as unreadable so a save cannot "+"overwrite the hand-edited bytes. Make the top level a JSON object to re-enable persistence.");I=null;return null}const G=z;if("data"in G){const K=G.data;if(K===null||typeof K!=="object"||Array.isArray(K)){console.warn("[omelette.storage] "+h+' has a "data" field that is not a JSON object; treating the store as unreadable so a '+'save cannot overwrite the hand-edited bytes. Make "data" a JSON object to re-enable persistence.');I=null;return null}const D=G._meta;const j=D!==null&&typeof D==="object"?D.project:undefined;if(typeof j==="string"&&j!==""&&j!==i())return V;for(const H of Object.keys(K))V.set(H,K[H]);return V}for(const K of Object.keys(G)){if(K!=="_meta")V.set(K,G[K])}return V})}return I};var y=(W)=>S(h,JSON.stringify({_meta:{project:i(),version:1},data:Object.fromEntries(W)},null,2));var m=Promise.resolve();var T=(W)=>{const V=m.then(W);m=V.then(()=>{return},()=>{return});return V};var s=/sk-(?:ant-)?[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|xox[a-z]-[A-Za-z0-9][A-Za-z0-9-]{9,}|AIza[0-9A-Za-z_-]{30,}|-----BEGIN [A-Z ]*PRIVATE KEY-----/;var a=/password|passwd|secret|api[_-]?key|access[_-]?token|auth[_-]?token|credential/i;var r=(W,V,z)=>{if(s.test(V)||a.test(W)&&typeof z==="string"&&z.length>=8){console.warn('[omelette.storage] the value for "'+W+'" looks like a credential. The storage file is a plaintext project file — visible to '+"everyone with project access and copied when the project is duplicated. Do not store secrets here.")}};var l={persisted:false,reason:"could not load the existing store — not overwriting it"};var c={persisted:false,reason:"stored value changed since a failed read — re-read this key before saving"};var E=new Set;var t={get:(W)=>{if(typeof W!=="string"){return Promise.reject(new TypeError("storage.get: key must be a string"))}return T(_).then((V)=>{if(V===null){E.add(W);return null}E.delete(W);if(!V.has(W))return null;const z=V.get(W);return z==null?null:JSON.parse(JSON.stringify(z))})},set:(W,V)=>{if(typeof W!=="string"){return Promise.reject(new TypeError("storage.set: key must be a string"))}let z;try{z=JSON.stringify(V)}catch(K){return Promise.reject(new TypeError("storage.set: value must be JSON-serializable ("+String(K)+")"))}if(z===undefined){return Promise.reject(new TypeError("storage.set: value must be JSON-serializable"))}r(W,z,V);const G=JSON.parse(z);return T(()=>_().then((K)=>{if(K===null)return l;if(E.has(W)){if(K.has(W))return c;E.delete(W)}K.set(W,G);return y(K)}))},delete:(W)=>{if(typeof W!=="string"){return Promise.reject(new TypeError("storage.delete: key must be a string"))}return T(()=>_().then((V)=>{if(V===null)return l;if(E.has(W)){if(V.has(W))return c;E.delete(W)}V.delete(W);return y(V)}))},keys:()=>T(_).then((W)=>W===null?[]:Array.from(W.keys()))};window.omelette={writeFile:(W,V)=>S(W,V).then((z)=>{if(!z.persisted&&!z.noHost){throw new Error(z.reason||"write failed")}}),storage:t};if(v&&v!==window){const W=(J,Q)=>{try{v.postMessage({__omelette_log:true,type:J,data:Q},"*")}catch{}};["log","warn","error"].forEach((J)=>{const Q=console[J];console[J]=(...$)=>{const Y=$.map((Z)=>{try{return typeof Z==="object"?JSON.stringify(Z):String(Z)}catch{try{return String(Z)}catch{return"[unstringifiable]"}}}).join(" ");W(J,Y);Q.apply(console,$)}});window.addEventListener("error",(J)=>{const Q=J.target;if(Q&&Q!==window&&Q.tagName){const $=Q.src||Q.href||"";W("resource_error",`${Q.tagName} failed to load: ${$}`)}else{W("error",`${J.message||"Unknown error"} at ${J.filename||"?"}:${J.lineno||0}:${J.colno||0}`)}},true);window.addEventListener("unhandledrejection",(J)=>{const Q=J.reason;const $=Q instanceof Error?`${Q.message} ${Q.stack}`:String(Q);W("error",`Unhandled rejection: ${$}`)});window.addEventListener("click",(J)=>{if(J.defaultPrevented||J.button!==0)return;if(J.metaKey||J.ctrlKey||J.shiftKey||J.altKey)return;const Q=J.composedPath?J.composedPath():[];const $=["button","input","select","textarea","summary","label"];let Y=null;for(const x of Q){if(!(x instanceof Element))continue;if(x.localName==="a"){if(!(x instanceof HTMLAnchorElement))return;Y=x;break}if($.indexOf(x.localName)!==-1)return}if(!Y)return;if(Y.isContentEditable)return;const Z=Y.closest("[contenteditable]");if(Z&&Z.getAttribute("contenteditable")!=="false")return;const B=(Y.getAttribute("target")||"_self").toLowerCase();if(B!=="_self"&&B!=="_top"&&B!=="_parent")return;let U;try{U=new URL(Y.href)}catch{return}if(U.protocol!=="http:"&&U.protocol!=="https:")return;if(location.origin==="null")return;if(U.origin===location.origin)return;J.preventDefault();window.open(U.href,"_blank","noopener,noreferrer")});const V=()=>{try{v.postMessage({type:"omelette:height",height:document.documentElement.scrollHeight},"*")}catch{}};if(window.ResizeObserver)new ResizeObserver(V).observe(document.documentElement);const z=()=>{V();if(!document.querySelector('script[type="text/babel"],script[type="text/jsx"]'))return;const J=()=>document.getElementById("root")||document.querySelector("body > div[id]");const Q=J()?.firstElementChild??null;let $=0;const Y=()=>{const Z=J();if(Z&&Z.firstElementChild!==Q||++$>30){V();return}setTimeout(Y,100)};setTimeout(Y,100)};if(document.readyState==="complete")z();else window.addEventListener("load",z);const G={};let K=0;const D=(J)=>new Promise((Q,$)=>{if(!b.length){$(new Error("claude.complete: no parent origin"));return}const Y=`c${++K}`;const Z=()=>setTimeout(()=>{delete G[Y];$(new Error(`claude.complete: no data for ${O/1000}s`))},O);const B=Z();G[Y]={resolve:Q,reject:$,text:"",t:B,arm:Z};try{for(const U of b){v.postMessage({__om_api:true,id:Y,body:J},U)}}catch(U){clearTimeout(B);delete G[Y];$(U)}});const j=8;const H=async(J,Q)=>{if(!Array.isArray(J.messages)){throw new Error("claude.complete: tools require a messages array")}const $=J.messages.slice();const Y={...J,tools:J.tools.map((U)=>{if(U===null||typeof U!=="object")return U;const x={};for(const q of Object.keys(U)){if(typeof U[q]!=="function")x[q]=U[q]}return x})};const Z=Y.tool_choice;const B=Z!=null&&(Z.type==="any"||Z.type==="tool")?{...Y,tool_choice:Z.disable_parallel_tool_use!==undefined?{type:"auto",disable_parallel_tool_use:Z.disable_parallel_tool_use}:{type:"auto"}}:Y;for(let U=0;U<j;U++){const x=await D({...U===0?Y:B,messages:$});const q=x.message;const M=q&&Array.isArray(q.content)?q.content:null;const L=M?M.filter((X)=>X?.type==="tool_use"):[];if(q?.stop_reason!=="tool_use"||L.length===0){return x.text}const N=[];for(const X of L){const f=Q.get(X.name);if(!f){N.push({type:"tool_result",tool_use_id:X.id,content:`no handler for tool "${X.name}"`,is_error:true});continue}try{const C=await f(X.input);const w=typeof C==="string"?C:R(C)??"";N.push({type:"tool_result",tool_use_id:X.id,content:w})}catch(C){N.push({type:"tool_result",tool_use_id:X.id,content:String(C?.message??C??"tool handler failed"),is_error:true})}}$.push({role:"assistant",content:M},{role:"user",content:N})}throw new Error(`claude.complete: exceeded ${j} tool turns`)};window.claude={complete(J){const Q=J;if(Q!==null&&typeof Q==="object"&&Array.isArray(Q.tools)&&Q.tools.some(($)=>$!==null&&typeof $==="object"&&typeof $.run==="function")){const $=new Map;for(const Y of Q.tools){if(Y!==null&&typeof Y==="object"&&typeof Y.run==="function"){$.set(String(Y.name),Y.run)}}return H(Q,$)}return D(J).then(($)=>$.text)}};const F={};let P=0;S=(J,Q)=>new Promise(($)=>{if(!b.length){$({persisted:false,noHost:true,reason:g});return}const Y=`f${++P}`;const Z=setTimeout(()=>{delete F[Y];$({persisted:false,noHost:true,reason:g})},n);F[Y]={settle:$,t:Z};try{for(const B of b){v.postMessage({__om_file:true,id:Y,op:"write",path:J,content:Q},B)}}catch{clearTimeout(Z);delete F[Y];$({persisted:false,noHost:true,reason:g})}});const R=(J)=>{try{return JSON.stringify(J)}catch{return JSON.stringify(String(J))}};window.addEventListener("message",(J)=>{if(b.indexOf(J.origin)<0)return;if(J.source!==v)return;const Q=J.data;if(!Q)return;if(Q.type==="omelette-preview-refresh"){if(typeof Q.token!=="string"||!/^[0-9a-f.-]+(\.(rc|pr-[0-9]+))?(\.[0-9]+\.[0-9a-f]{16})?$/.test(Q.token))return;const Z=Math.max(1,Math.floor((Q.expiresAt||0)-Date.now()/1000));document.cookie="__Host-omelette-preview="+Q.token+"; Path=/; Secure; SameSite=None; Partitioned; Max-Age="+Z;return}if(Q.__om_file_r){const Z=F[Q.id];if(!Z)return;clearTimeout(Z.t);delete F[Q.id];Z.settle(Q.ok?{persisted:true}:{persisted:false,reason:Q.error||"write failed"});return}if(Q.__om_api_r){const Z=G[Q.id];if(!Z)return;if(Q.error!=null){clearTimeout(Z.t);delete G[Q.id];Z.reject(new Error(Q.error));return}if(Q.chunk!=null){clearTimeout(Z.t);Z.t=Z.arm();Z.text+=Q.chunk;return}if(Q.done){clearTimeout(Z.t);delete G[Q.id];Z.resolve({text:Q.text!=null?Q.text:Z.text,message:Q.message});return}return}if(!Q.__om_eval)return;const $=Q;const Y=(Z)=>{J.source.postMessage({...Z,__om_eval_r:1,id:$.id},J.origin)};try{const Z=(0,eval)($.code);if(Z&&typeof Z.then==="function"){Z.then((B)=>Y({ok:1,v:R(B)}),(B)=>Y({ok:0,e:String(B)}))}else{Y({ok:1,v:R(Z)})}}catch(Z){Y({ok:0,e:String(Z)})}})}})();
+</script>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#EEF1F6;font-family:'Noto Sans JP',system-ui,sans-serif;color:#16203A;-webkit-font-smoothing:antialiased}
+  a{color:#2563EB;text-decoration:none}
+  a:hover{color:#1B4CD6}
+  .mono{font-family:'Roboto Mono',ui-monospace,monospace}
+</style>
+</helmet>
+
+<div style="padding:56px 60px 80px;max-width:2600px;margin:0 auto">
+
+  <!-- ===== BOARD HEADER ===== -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:8px">
+    <div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px">
+        <div style="width:44px;height:44px;border-radius:11px;background:#2563EB;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(37,99,235,.35)">
+          <div style="width:20px;height:20px;border:3px solid #fff;border-radius:6px;transform:rotate(45deg)"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;letter-spacing:.14em;font-weight:700;color:#8A96AC">GEMBA ONE — 画面デザイン</div>
+          <div style="font-size:30px;font-weight:900;letter-spacing:-.01em;line-height:1.1">作業指示・進捗管理サービス UIキット</div>
+        </div>
+      </div>
+      <div style="font-size:14px;color:#5A6784;max-width:720px;line-height:1.7">配管・設備工事業向けクラウド型作業指示ツール。社長（admin）はPCで登録・集計、従業員（employee）はスマホでタスク確認・完了報告。全画面デザインとデザイントークンをまとめた実装ハンドオフ用ボードです。</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div style="font-size:12px;font-weight:700;color:#334; background:#fff;border:1px solid #E4E9F2;border-radius:999px;padding:9px 16px">FastAPI + Jinja2</div>
+      <div style="font-size:12px;font-weight:700;color:#334; background:#fff;border:1px solid #E4E9F2;border-radius:999px;padding:9px 16px">HTMX + Alpine.js</div>
+      <div style="font-size:12px;font-weight:700;color:#334; background:#fff;border:1px solid #E4E9F2;border-radius:999px;padding:9px 16px">レスポンシブ（PC / スマホ）</div>
+    </div>
+  </div>
+
+  <div style="height:1px;background:#DDE3EC;margin:34px 0 44px"></div>
+
+  <!-- ===== STYLE GUIDE ===== -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <span style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;background:#16203A;color:#fff;border-radius:6px;padding:5px 10px">00</span>
+    <span style="font-size:19px;font-weight:900">デザインシステム</span>
+    <span style="font-size:13px;color:#8A96AC">— カラー・タイポグラフィ・コンポーネント</span>
+  </div>
+
+  <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:60px">
+    <!-- Colors -->
+    <div style="flex:1;min-width:360px;background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:26px">
+      <div style="font-size:13px;font-weight:700;color:#8A96AC;letter-spacing:.08em;margin-bottom:18px">カラーパレット</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div><div style="height:56px;border-radius:10px;background:#2563EB;border:1px solid rgba(0,0,0,.05)"></div><div style="font-size:11px;font-weight:700;margin-top:7px">Primary</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#2563EB</div></div>
+        <div><div style="height:56px;border-radius:10px;background:#1B4CD6"></div><div style="font-size:11px;font-weight:700;margin-top:7px">Primary D</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#1B4CD6</div></div>
+        <div><div style="height:56px;border-radius:10px;background:#ECF2FE"></div><div style="font-size:11px;font-weight:700;margin-top:7px">Primary L</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#ECF2FE</div></div>
+        <div><div style="height:56px;border-radius:10px;background:#111A2E"></div><div style="font-size:11px;font-weight:700;margin-top:7px">Navy / Nav</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#111A2E</div></div>
+        <div><div style="height:56px;border-radius:10px;background:#16203A"></div><div style="font-size:11px;font-weight:700;margin-top:7px">Ink</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#16203A</div></div>
+        <div><div style="height:56px;border-radius:10px;background:#5A6784"></div><div style="font-size:11px;font-weight:700;margin-top:7px">Ink-2</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#5A6784</div></div>
+        <div><div style="height:56px;border-radius:10px;background:#F4F6FA;border:1px solid #E4E9F2"></div><div style="font-size:11px;font-weight:700;margin-top:7px">BG</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#F4F6FA</div></div>
+        <div><div style="height:56px;border-radius:10px;background:#fff;border:1px solid #E4E9F2"></div><div style="font-size:11px;font-weight:700;margin-top:7px">Surface</div><div class="mono" style="font-size:10.5px;color:#8A96AC">#FFFFFF</div></div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;letter-spacing:.08em;margin:24px 0 14px">ステータス</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;background:#FBF0DC;color:#B26A00;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700"><span style="width:8px;height:8px;border-radius:50%;background:#E08A00"></span>未着手</div>
+        <div style="display:flex;align-items:center;gap:8px;background:#E7EFFE;color:#1B4CD6;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700"><span style="width:8px;height:8px;border-radius:50%;background:#2563EB"></span>作業中</div>
+        <div style="display:flex;align-items:center;gap:8px;background:#E4F4EB;color:#167C4A;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700"><span style="width:8px;height:8px;border-radius:50%;background:#1FA25E"></span>完了</div>
+      </div>
+    </div>
+
+    <!-- Type + tokens -->
+    <div style="flex:1;min-width:360px;background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:26px">
+      <div style="font-size:13px;font-weight:700;color:#8A96AC;letter-spacing:.08em;margin-bottom:18px">タイポグラフィ — Noto Sans JP</div>
+      <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #EEF1F6;padding-bottom:12px;margin-bottom:12px"><span style="font-size:30px;font-weight:900">見出し 30/900</span><span class="mono" style="font-size:11px;color:#8A96AC">h1 / display</span></div>
+      <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #EEF1F6;padding-bottom:12px;margin-bottom:12px"><span style="font-size:20px;font-weight:700">セクション 20/700</span><span class="mono" style="font-size:11px;color:#8A96AC">h2</span></div>
+      <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #EEF1F6;padding-bottom:12px;margin-bottom:12px"><span style="font-size:15px;font-weight:700">カード見出し 15/700</span><span class="mono" style="font-size:11px;color:#8A96AC">h3</span></div>
+      <div style="display:flex;align-items:baseline;gap:14px;border-bottom:1px solid #EEF1F6;padding-bottom:12px;margin-bottom:12px"><span style="font-size:14px;font-weight:400">本文テキスト 14/400</span><span class="mono" style="font-size:11px;color:#8A96AC">body</span></div>
+      <div style="display:flex;align-items:baseline;gap:14px"><span style="font-size:12px;font-weight:500;color:#8A96AC">補足キャプション 12/500</span><span class="mono" style="font-size:11px;color:#8A96AC">caption</span></div>
+
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;letter-spacing:.08em;margin:24px 0 14px">トークン</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;font-size:12.5px">
+        <div style="display:flex;justify-content:space-between"><span style="color:#5A6784">radius-card</span><span class="mono" style="font-weight:500">16px</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#5A6784">radius-btn</span><span class="mono" style="font-weight:500">10px</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#5A6784">radius-pill</span><span class="mono" style="font-weight:500">999px</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#5A6784">space-unit</span><span class="mono" style="font-weight:500">4px 基準</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#5A6784">shadow-card</span><span class="mono" style="font-weight:500">0 1 3</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#5A6784">border</span><span class="mono" style="font-weight:500">#E4E9F2</span></div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;letter-spacing:.08em;margin:24px 0 14px">ボタン</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <div style="background:#2563EB;color:#fff;font-size:13px;font-weight:700;border-radius:10px;padding:11px 20px;box-shadow:0 2px 8px rgba(37,99,235,.28)">プライマリ</div>
+        <div style="background:#fff;color:#2563EB;font-size:13px;font-weight:700;border-radius:10px;padding:11px 20px;border:1.5px solid #C9D8F7">セカンダリ</div>
+        <div style="background:#fff;color:#5A6784;font-size:13px;font-weight:700;border-radius:10px;padding:11px 20px;border:1.5px solid #E4E9F2">キャンセル</div>
+        <div style="background:#E4F4EB;color:#167C4A;font-size:13px;font-weight:700;border-radius:10px;padding:11px 20px">完了</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 01 LOGIN ===== -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <span style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;background:#16203A;color:#fff;border-radius:6px;padding:5px 10px">01</span>
+    <span style="font-size:19px;font-weight:900">ログイン画面</span>
+    <span style="font-size:13px;color:#8A96AC">— JWT認証 / 共通（PC・スマホ）</span>
+  </div>
+
+  <div style="display:flex;gap:40px;flex-wrap:wrap;align-items:flex-start;margin-bottom:64px">
+    <!-- PC login -->
+    <div style="flex:none">
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:10px">PC — /login</div>
+      <div style="width:900px;border-radius:14px;overflow:hidden;box-shadow:0 18px 46px rgba(16,26,54,.16);border:1px solid #E4E9F2">
+        <div style="height:38px;background:#fff;border-bottom:1px solid #EEF1F6;display:flex;align-items:center;gap:7px;padding:0 15px">
+          <span style="width:11px;height:11px;border-radius:50%;background:#FF5F57"></span><span style="width:11px;height:11px;border-radius:50%;background:#FEBC2E"></span><span style="width:11px;height:11px;border-radius:50%;background:#28C840"></span>
+          <div class="mono" style="margin-left:12px;font-size:11px;color:#8A96AC;background:#F4F6FA;border-radius:6px;padding:4px 12px">app.gemba-one.jp/login</div>
+        </div>
+        <div style="display:flex;height:520px">
+          <div style="flex:1;background:#111A2E;color:#fff;padding:52px 46px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden">
+            <div style="position:absolute;right:-70px;top:-70px;width:240px;height:240px;border:2px solid rgba(37,99,235,.25);border-radius:34px;transform:rotate(45deg)"></div>
+            <div style="position:absolute;right:20px;bottom:-40px;width:160px;height:160px;border:2px solid rgba(255,255,255,.06);border-radius:26px;transform:rotate(45deg)"></div>
+            <div style="display:flex;align-items:center;gap:12px;position:relative">
+              <div style="width:38px;height:38px;border-radius:10px;background:#2563EB;display:flex;align-items:center;justify-content:center"><div style="width:16px;height:16px;border:3px solid #fff;border-radius:5px;transform:rotate(45deg)"></div></div>
+            </div>
+            <div style="position:relative">
+              <div style="font-size:26px;font-weight:900;line-height:1.4">Gemba One</div>
+            </div>
+            <div class="mono" style="font-size:11px;color:#5E6B84;position:relative">© 2026 Gemba One</div>
+          </div>
+          <div style="flex:1;background:#fff;padding:56px 54px;display:flex;flex-direction:column;justify-content:center">
+            <div style="font-size:22px;font-weight:900;margin-bottom:6px">ログイン</div>
+            <div style="font-size:13px;color:#8A96AC;margin-bottom:30px">ユーザー名とパスワードを入力してください</div>
+            <label style="font-size:12.5px;font-weight:700;color:#5A6784;margin-bottom:8px">ユーザー名</label>
+            <div style="height:48px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 15px;font-size:14px;color:#8A96AC;margin-bottom:18px">tanaka</div>
+            <label style="font-size:12.5px;font-weight:700;color:#5A6784;margin-bottom:8px">パスワード</label>
+            <div style="height:48px;border:1.5px solid #2563EB;border-radius:10px;display:flex;align-items:center;padding:0 15px;font-size:16px;color:#16203A;letter-spacing:.2em;margin-bottom:26px;box-shadow:0 0 0 4px rgba(37,99,235,.12)">••••••••</div>
+            <div style="height:50px;background:#2563EB;color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(37,99,235,.34)">ログイン</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile login -->
+    <div style="flex:none">
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:10px">スマホ — /login</div>
+      <div style="width:330px;border-radius:36px;padding:11px;background:#0E1220;box-shadow:0 22px 50px rgba(16,26,54,.28)">
+        <div style="border-radius:28px;overflow:hidden;background:#fff;height:670px;display:flex;flex-direction:column">
+          <div style="background:#111A2E;padding:44px 30px 40px;color:#fff;position:relative;overflow:hidden">
+            <div style="position:absolute;right:-40px;top:-40px;width:150px;height:150px;border:2px solid rgba(37,99,235,.28);border-radius:24px;transform:rotate(45deg)"></div>
+            <div style="display:flex;align-items:center;gap:10px;position:relative">
+              <div style="width:34px;height:34px;border-radius:9px;background:#2563EB;display:flex;align-items:center;justify-content:center"><div style="width:14px;height:14px;border:3px solid #fff;border-radius:5px;transform:rotate(45deg)"></div></div>
+            </div>
+            <div style="font-size:20px;font-weight:900;color:#fff;margin-top:18px;position:relative">Gemba One</div>
+          </div>
+          <div style="padding:34px 26px;display:flex;flex-direction:column;flex:1">
+            <div style="font-size:19px;font-weight:900;margin-bottom:24px">ログイン</div>
+            <label style="font-size:12px;font-weight:700;color:#5A6784;margin-bottom:7px">ユーザー名</label>
+            <div style="height:50px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 15px;font-size:15px;color:#8A96AC;margin-bottom:16px">tanaka</div>
+            <label style="font-size:12px;font-weight:700;color:#5A6784;margin-bottom:7px">パスワード</label>
+            <div style="height:50px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 15px;font-size:16px;color:#16203A;letter-spacing:.2em;margin-bottom:24px">••••••••</div>
+            <div style="height:52px;background:#2563EB;color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(37,99,235,.34)">ログイン</div>
+            <div style="flex:1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 02 DASHBOARD (admin) ===== -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+    <span style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;background:#16203A;color:#fff;border-radius:6px;padding:5px 10px">02</span>
+    <span style="font-size:19px;font-weight:900">ダッシュボード画面</span>
+    <span style="font-size:13px;color:#8A96AC">— adminのみ / PC / 全従業員の作業状況</span>
+  </div>
+  <div style="font-size:13px;color:#5A6784;margin-bottom:24px;max-width:760px;line-height:1.7">KPIカード（本日の完了予定／完了済／未完了）と本日の進捗バー、従業員ごとの進捗カードグリッドで構成。各カードから該当従業員のタスク一覧に遷移。左固定ナビは共通。</div>
+
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;margin-bottom:64px">
+
+    <!-- ===== 1a ===== -->
+    <div id="1a" style="flex:none;scroll-margin-top:20px">
+      <div style="width:1180px;border-radius:14px;overflow:hidden;box-shadow:0 18px 46px rgba(16,26,54,.16);border:1px solid #E4E9F2">
+        <div style="height:38px;background:#fff;border-bottom:1px solid #EEF1F6;display:flex;align-items:center;gap:7px;padding:0 15px">
+          <span style="width:11px;height:11px;border-radius:50%;background:#FF5F57"></span><span style="width:11px;height:11px;border-radius:50%;background:#FEBC2E"></span><span style="width:11px;height:11px;border-radius:50%;background:#28C840"></span>
+          <div class="mono" style="margin-left:12px;font-size:11px;color:#8A96AC;background:#F4F6FA;border-radius:6px;padding:4px 12px">app.gemba-one.jp/dashboard</div>
+        </div>
+        <div style="display:flex;height:760px;background:#F4F6FA">
+          <!-- SIDEBAR -->
+          <aside style="width:220px;background:#111A2E;flex:none;padding:24px 16px;display:flex;flex-direction:column;color:#fff">
+            <div style="display:flex;align-items:center;gap:10px;padding:0 8px 26px">
+              <div style="width:32px;height:32px;border-radius:9px;background:#2563EB;display:flex;align-items:center;justify-content:center"><div style="width:13px;height:13px;border:3px solid #fff;border-radius:4px;transform:rotate(45deg)"></div></div>
+              <div style="font-size:16px;font-weight:900">Gemba One</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:#2563EB;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:700;margin-bottom:4px;color:#fff"><span style="display:grid;grid-template-columns:1fr 1fr;gap:2px;width:16px;height:16px"><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i></span>ダッシュボード</div>
+            <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:500;margin-bottom:4px;color:#A9B4C9"><span style="display:flex;flex-direction:column;gap:3px;width:16px;height:16px;justify-content:center"><i style="height:2.5px;background:currentColor;border-radius:2px"></i><i style="height:2.5px;background:currentColor;border-radius:2px"></i><i style="height:2.5px;background:currentColor;border-radius:2px"></i></span>タスク一覧</div>
+            <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:500;margin-bottom:4px;color:#A9B4C9"><span style="width:16px;height:16px;border:2.5px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center"><i style="width:4px;height:4px;border-radius:50%;background:currentColor"></i></span>設定</div>
+            <div style="flex:1"></div>
+            <div style="height:1px;background:rgba(255,255,255,.08);margin:8px 6px 12px"></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 8px 14px">
+              
+              <div><div style="font-size:12.5px;font-weight:700">田中 社長</div><div class="mono" style="font-size:10.5px;color:#7E8AA3">admin</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:500;color:#A9B4C9;border:1px solid rgba(255,255,255,.1)"><span style="width:15px;height:15px;border:2.5px solid currentColor;border-radius:4px;border-right-color:transparent"></span>ログアウト</div>
+          </aside>
+          <!-- MAIN -->
+          <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+            <div style="height:70px;background:#fff;border-bottom:1px solid #E4E9F2;display:flex;align-items:center;justify-content:space-between;padding:0 30px;flex:none">
+              <div><div style="font-size:19px;font-weight:900">ダッシュボード</div></div>
+              <div style="display:flex;align-items:center;gap:16px"><div class="mono" style="font-size:12.5px;color:#5A6784">2026-07-08 (火)</div></div>
+            </div>
+            <div style="padding:26px 30px;overflow:auto">
+              <!-- KPI ROW -->
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:26px">
+                <div style="background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:22px 24px">
+                  <div style="font-size:12.5px;font-weight:700;color:#8A96AC;margin-bottom:12px">本日の完了予定</div>
+                  <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:38px;font-weight:900;line-height:1">14</span><span style="font-size:14px;font-weight:700;color:#8A96AC">件</span></div>
+                </div>
+                <div style="background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:22px 24px;position:relative;overflow:hidden">
+                  <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#1FA25E"></div>
+                  <div style="font-size:12.5px;font-weight:700;color:#8A96AC;margin-bottom:12px">完了済み</div>
+                  <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:38px;font-weight:900;line-height:1;color:#167C4A">8</span><span style="font-size:14px;font-weight:700;color:#8A96AC">件</span><span style="margin-left:6px;font-size:12px;font-weight:700;color:#1FA25E;background:#E4F4EB;border-radius:999px;padding:3px 9px">57%</span></div>
+                </div>
+                <div style="background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:22px 24px;position:relative;overflow:hidden">
+                  <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#E08A00"></div>
+                  <div style="font-size:12.5px;font-weight:700;color:#8A96AC;margin-bottom:12px">未完了（未着手・作業中）</div>
+                  <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:38px;font-weight:900;line-height:1;color:#B26A00">6</span><span style="font-size:14px;font-weight:700;color:#8A96AC">件</span></div>
+                </div>
+              </div>
+              <!-- progress bar -->
+              <div style="background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:20px 24px;margin-bottom:26px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="font-size:13px;font-weight:700">本日の進捗</span><span class="mono" style="font-size:12px;color:#5A6784">8 / 14</span></div>
+                <div style="height:12px;border-radius:999px;background:#EEF1F6;overflow:hidden;display:flex"><div style="width:57%;background:#1FA25E"></div><div style="width:14%;background:#2563EB"></div></div>
+                <div style="display:flex;gap:18px;margin-top:12px;font-size:11.5px;color:#5A6784"><span style="display:flex;align-items:center;gap:6px"><i style="width:9px;height:9px;border-radius:2px;background:#1FA25E"></i>完了 8</span><span style="display:flex;align-items:center;gap:6px"><i style="width:9px;height:9px;border-radius:2px;background:#2563EB"></i>作業中 2</span><span style="display:flex;align-items:center;gap:6px"><i style="width:9px;height:9px;border-radius:2px;background:#EEF1F6;border:1px solid #D5DCE6"></i>未着手 4</span></div>
+              </div>
+              <!-- employee cards -->
+              <div style="font-size:13px;font-weight:700;color:#5A6784;margin-bottom:14px">従業員ごとの進捗</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+                <!-- card A -->
+                <div style="background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:20px">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1"><div style="font-size:15px;font-weight:700">佐藤 健一</div></div><span style="width:28px;height:28px;border-radius:8px;background:#F4F6FA;display:flex;align-items:center;justify-content:center;color:#8A96AC;font-size:16px">›</span></div>
+                  <div style="height:8px;border-radius:999px;background:#EEF1F6;overflow:hidden;margin-bottom:12px"><div style="width:75%;height:100%;background:#1FA25E"></div></div>
+                  <div style="display:flex;justify-content:space-between;font-size:11.5px"><span style="color:#167C4A;font-weight:700">完了 3</span><span style="color:#2563EB;font-weight:700">作業中 1</span><span style="color:#B26A00;font-weight:700">未着手 0</span></div>
+                </div>
+                <!-- card B -->
+                <div style="background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:20px">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1"><div style="font-size:15px;font-weight:700">鈴木 大輔</div></div><span style="width:28px;height:28px;border-radius:8px;background:#F4F6FA;display:flex;align-items:center;justify-content:center;color:#8A96AC;font-size:16px">›</span></div>
+                  <div style="height:8px;border-radius:999px;background:#EEF1F6;overflow:hidden;margin-bottom:12px"><div style="width:40%;height:100%;background:#1FA25E"></div></div>
+                  <div style="display:flex;justify-content:space-between;font-size:11.5px"><span style="color:#167C4A;font-weight:700">完了 2</span><span style="color:#2563EB;font-weight:700">作業中 1</span><span style="color:#B26A00;font-weight:700">未着手 2</span></div>
+                </div>
+                <!-- card C -->
+                <div style="background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:20px">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1"><div style="font-size:15px;font-weight:700">高橋 修</div></div><span style="width:28px;height:28px;border-radius:8px;background:#F4F6FA;display:flex;align-items:center;justify-content:center;color:#8A96AC;font-size:16px">›</span></div>
+                  <div style="height:8px;border-radius:999px;background:#EEF1F6;overflow:hidden;margin-bottom:12px"><div style="width:100%;height:100%;background:#1FA25E"></div></div>
+                  <div style="display:flex;justify-content:space-between;font-size:11.5px"><span style="color:#167C4A;font-weight:700">完了 3</span><span style="color:#2563EB;font-weight:700">作業中 0</span><span style="color:#B26A00;font-weight:700">未着手 0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 03 TASK LIST ===== -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+    <span style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;background:#16203A;color:#fff;border-radius:6px;padding:5px 10px">03</span>
+    <span style="font-size:19px;font-weight:900">タスク一覧画面</span>
+    <span style="font-size:13px;color:#8A96AC">— admin / employee 共通</span>
+  </div>
+  <div style="font-size:13px;color:#5A6784;margin-bottom:24px;max-width:820px;line-height:1.7">タスクカードグリッド形式。担当者・予定日・ステータスをカード表示し、左ボーダー色でステータスを区別。employeeは自分のタスクのみ表示し、右下の <b>+</b>（タスク追加）はadminのみ。FABはスクロールしても右下に固定。</div>
+
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;margin-bottom:44px">
+
+    <!-- 2a -->
+    <div id="2a" style="flex:none;scroll-margin-top:20px">
+      <div style="width:1180px;border-radius:14px;overflow:hidden;box-shadow:0 18px 46px rgba(16,26,54,.16);border:1px solid #E4E9F2">
+        <div style="height:38px;background:#fff;border-bottom:1px solid #EEF1F6;display:flex;align-items:center;gap:7px;padding:0 15px">
+          <span style="width:11px;height:11px;border-radius:50%;background:#FF5F57"></span><span style="width:11px;height:11px;border-radius:50%;background:#FEBC2E"></span><span style="width:11px;height:11px;border-radius:50%;background:#28C840"></span>
+          <div class="mono" style="margin-left:12px;font-size:11px;color:#8A96AC;background:#F4F6FA;border-radius:6px;padding:4px 12px">app.gemba-one.jp/tasks</div>
+        </div>
+        <div style="display:flex;height:720px;background:#F4F6FA;position:relative">
+          <aside style="width:220px;background:#111A2E;flex:none;padding:24px 16px;display:flex;flex-direction:column;color:#fff">
+            <div style="display:flex;align-items:center;gap:10px;padding:0 8px 26px">
+              <div style="width:32px;height:32px;border-radius:9px;background:#2563EB;display:flex;align-items:center;justify-content:center"><div style="width:13px;height:13px;border:3px solid #fff;border-radius:4px;transform:rotate(45deg)"></div></div>
+              <div style="font-size:16px;font-weight:900">Gemba One</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:500;margin-bottom:4px;color:#A9B4C9"><span style="display:grid;grid-template-columns:1fr 1fr;gap:2px;width:16px;height:16px"><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i></span>ダッシュボード</div>
+            <div style="display:flex;align-items:center;gap:12px;background:#2563EB;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:700;margin-bottom:4px;color:#fff"><span style="display:flex;flex-direction:column;gap:3px;width:16px;height:16px;justify-content:center"><i style="height:2.5px;background:currentColor;border-radius:2px"></i><i style="height:2.5px;background:currentColor;border-radius:2px"></i><i style="height:2.5px;background:currentColor;border-radius:2px"></i></span>タスク一覧</div>
+            <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:500;margin-bottom:4px;color:#A9B4C9"><span style="width:16px;height:16px;border:2.5px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center"><i style="width:4px;height:4px;border-radius:50%;background:currentColor"></i></span>設定</div>
+            <div style="flex:1"></div>
+            <div style="height:1px;background:rgba(255,255,255,.08);margin:8px 6px 12px"></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:6px 8px 14px"><div><div style="font-size:12.5px;font-weight:700">田中 社長</div><div class="mono" style="font-size:10.5px;color:#7E8AA3">admin</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:500;color:#A9B4C9;border:1px solid rgba(255,255,255,.1)"><span style="width:15px;height:15px;border:2.5px solid currentColor;border-radius:4px;border-right-color:transparent"></span>ログアウト</div>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+            <div style="height:70px;background:#fff;border-bottom:1px solid #E4E9F2;display:flex;align-items:center;justify-content:space-between;padding:0 30px;flex:none">
+              <div style="font-size:19px;font-weight:900">タスク一覧</div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="display:flex;background:#F4F6FA;border-radius:9px;padding:4px;gap:2px;font-size:12px;font-weight:700"><span style="padding:6px 12px;border-radius:6px;background:#fff;color:#2563EB;box-shadow:0 1px 2px rgba(0,0,0,.06)">すべて</span><span style="padding:6px 12px;color:#8A96AC">未着手</span><span style="padding:6px 12px;color:#8A96AC">作業中</span><span style="padding:6px 12px;color:#8A96AC">完了</span></div>
+              </div>
+            </div>
+            <div style="padding:24px 30px;overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:16px;align-content:start">
+              <!-- task card in_progress -->
+              <div style="background:#fff;border:1px solid #E4E9F2;border-radius:14px;padding:18px 20px;border-left:4px solid #2563EB">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="font-size:15px;font-weight:700;line-height:1.4;max-width:70%">給湯器交換工事 ／ 山田様邸</div><div style="display:flex;align-items:center;gap:6px;background:#E7EFFE;color:#1B4CD6;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700"><i style="width:7px;height:7px;border-radius:50%;background:#2563EB"></i>作業中</div></div>
+                <div style="display:flex;align-items:center;gap:16px;font-size:12.5px;color:#5A6784;margin-bottom:16px"><span style="display:flex;align-items:center;gap:6px">佐藤 健一</span><span class="mono">2026-07-08</span></div>
+                <div style="display:flex;gap:8px"><div style="flex:1;text-align:center;background:#E4F4EB;color:#167C4A;border-radius:9px;padding:10px 0;font-size:13px;font-weight:700">完了</div><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:9px;padding:10px 0;font-size:13px;font-weight:700">編集</div></div>
+              </div>
+              <!-- pending -->
+              <div style="background:#fff;border:1px solid #E4E9F2;border-radius:14px;padding:18px 20px;border-left:4px solid #E08A00">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="font-size:15px;font-weight:700;line-height:1.4;max-width:70%">エアコン新設 ／ 3F事務所</div><div style="display:flex;align-items:center;gap:6px;background:#FBF0DC;color:#B26A00;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700"><i style="width:7px;height:7px;border-radius:50%;background:#E08A00"></i>未着手</div></div>
+                <div style="display:flex;align-items:center;gap:16px;font-size:12.5px;color:#5A6784;margin-bottom:16px"><span style="display:flex;align-items:center;gap:6px">鈴木 大輔</span><span class="mono">2026-07-08</span></div>
+                <div style="display:flex;gap:8px"><div style="flex:1;text-align:center;background:#E4F4EB;color:#167C4A;border-radius:9px;padding:10px 0;font-size:13px;font-weight:700">完了</div><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:9px;padding:10px 0;font-size:13px;font-weight:700">編集</div></div>
+              </div>
+              <!-- completed -->
+              <div style="background:#fff;border:1px solid #E4E9F2;border-radius:14px;padding:18px 20px;border-left:4px solid #1FA25E;opacity:.72">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="font-size:15px;font-weight:700;line-height:1.4;max-width:70%;text-decoration:line-through;text-decoration-color:#B4BECD">水漏れ修理 ／ 田村マンション201</div><div style="display:flex;align-items:center;gap:6px;background:#E4F4EB;color:#167C4A;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700"><i style="width:7px;height:7px;border-radius:50%;background:#1FA25E"></i>完了</div></div>
+                <div style="display:flex;align-items:center;gap:16px;font-size:12.5px;color:#5A6784;margin-bottom:16px"><span style="display:flex;align-items:center;gap:6px">高橋 修</span><span class="mono">2026-07-08</span></div>
+                <div style="display:flex;gap:8px"><div style="flex:1;text-align:center;background:#F4F6FA;color:#B4BECD;border-radius:9px;padding:10px 0;font-size:13px;font-weight:700">完了済み</div></div>
+              </div>
+              <!-- pending 2 -->
+              <div style="background:#fff;border:1px solid #E4E9F2;border-radius:14px;padding:18px 20px;border-left:4px solid #E08A00">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div style="font-size:15px;font-weight:700;line-height:1.4;max-width:70%">排水管高圧洗浄 ／ 佐々木ビル</div><div style="display:flex;align-items:center;gap:6px;background:#FBF0DC;color:#B26A00;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700"><i style="width:7px;height:7px;border-radius:50%;background:#E08A00"></i>未着手</div></div>
+                <div style="display:flex;align-items:center;gap:16px;font-size:12.5px;color:#5A6784;margin-bottom:16px"><span style="display:flex;align-items:center;gap:6px">佐藤 健一</span><span class="mono">2026-07-08</span></div>
+                <div style="display:flex;gap:8px"><div style="flex:1;text-align:center;background:#E4F4EB;color:#167C4A;border-radius:9px;padding:10px 0;font-size:13px;font-weight:700">完了</div><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:9px;padding:10px 0;font-size:13px;font-weight:700">編集</div></div>
+              </div>
+            </div>
+          </div>
+          <!-- FAB (admin only) -->
+          <div style="position:absolute;right:28px;bottom:26px;width:58px;height:58px;border-radius:50%;background:#2563EB;box-shadow:0 8px 22px rgba(37,99,235,.44);display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;font-weight:300">+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- employee mobile -->
+    <div style="flex:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="font-family:'Roboto Mono',monospace;font-size:11px;font-weight:700;background:#5A6784;color:#fff;border-radius:6px;padding:4px 10px">emp</span>
+        <span style="font-size:13px;font-weight:700">employee スマホ表示（自分のタスクのみ・+なし）</span>
+      </div>
+      <div style="width:330px;border-radius:36px;padding:11px;background:#0E1220;box-shadow:0 22px 50px rgba(16,26,54,.28)">
+        <div style="border-radius:28px;overflow:hidden;background:#F4F6FA;height:700px;display:flex;flex-direction:column">
+          <div style="background:#111A2E;padding:18px 20px 16px;color:#fff;display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:9px"><div style="width:28px;height:28px;border-radius:8px;background:#2563EB;display:flex;align-items:center;justify-content:center"><div style="width:11px;height:11px;border:2.5px solid #fff;border-radius:4px;transform:rotate(45deg)"></div></div><div style="font-size:14px;font-weight:900">タスク一覧</div></div>
+            
+          </div>
+          <div style="padding:14px 16px 10px;display:flex;gap:8px;font-size:12px;font-weight:700;overflow:hidden"><span style="padding:7px 14px;border-radius:999px;background:#2563EB;color:#fff">すべて</span><span style="padding:7px 14px;border-radius:999px;background:#fff;color:#8A96AC;border:1px solid #E4E9F2">未着手</span><span style="padding:7px 14px;border-radius:999px;background:#fff;color:#8A96AC;border:1px solid #E4E9F2">作業中</span></div>
+          <div style="padding:6px 16px 16px;overflow:auto;display:flex;flex-direction:column;gap:12px">
+            <div style="background:#fff;border:1px solid #E4E9F2;border-radius:14px;padding:16px;border-left:4px solid #2563EB">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div style="font-size:14.5px;font-weight:700;line-height:1.4;max-width:62%">給湯器交換工事 ／ 山田様邸</div><div style="display:flex;align-items:center;gap:5px;background:#E7EFFE;color:#1B4CD6;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700"><i style="width:6px;height:6px;border-radius:50%;background:#2563EB"></i>作業中</div></div>
+              <div class="mono" style="font-size:12px;color:#8A96AC;margin-bottom:14px">2026-07-08</div>
+              <div style="display:flex;gap:8px"><div style="flex:1;text-align:center;background:#2563EB;color:#fff;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700">完了報告</div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E9F2;border-radius:14px;padding:16px;border-left:4px solid #E08A00">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div style="font-size:14.5px;font-weight:700;line-height:1.4;max-width:62%">排水管高圧洗浄 ／ 佐々木ビル</div><div style="display:flex;align-items:center;gap:5px;background:#FBF0DC;color:#B26A00;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700"><i style="width:6px;height:6px;border-radius:50%;background:#E08A00"></i>未着手</div></div>
+              <div class="mono" style="font-size:12px;color:#8A96AC;margin-bottom:14px">2026-07-08</div>
+              <div style="display:flex;gap:8px"><div style="flex:1;text-align:center;background:#2563EB;color:#fff;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700">完了報告</div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E9F2;border-radius:14px;padding:16px;border-left:4px solid #1FA25E;opacity:.72">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div style="font-size:14.5px;font-weight:700;line-height:1.4;max-width:62%;text-decoration:line-through;text-decoration-color:#B4BECD">定期点検 ／ 山田様邸</div><div style="display:flex;align-items:center;gap:5px;background:#E4F4EB;color:#167C4A;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700"><i style="width:6px;height:6px;border-radius:50%;background:#1FA25E"></i>完了</div></div>
+              <div class="mono" style="font-size:12px;color:#B4BECD">2026-07-07 完了済み</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 04 DIALOGS ===== -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <span style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;background:#16203A;color:#fff;border-radius:6px;padding:5px 10px">04</span>
+    <span style="font-size:19px;font-weight:900">ダイアログ</span>
+    <span style="font-size:13px;color:#8A96AC">— タスク追加・編集 / 完了確認（モーダル）</span>
+  </div>
+
+  <div style="display:flex;gap:40px;flex-wrap:wrap;align-items:flex-start;margin-bottom:64px">
+    <!-- Add/Edit dialog -->
+    <div style="flex:none">
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:10px">タスク追加・編集ダイアログ（adminのみ・追加/編集で流用）</div>
+      <div style="width:620px;height:520px;border-radius:16px;background:rgba(17,26,46,.55);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #E4E9F2">
+        <div style="width:440px;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden">
+          <div style="padding:22px 26px 0;display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:17px;font-weight:900">タスクを編集</div><div style="font-size:12px;color:#8A96AC;margin-top:3px">内容を修正して保存してください</div></div><span style="width:30px;height:30px;border-radius:8px;background:#F4F6FA;color:#8A96AC;display:flex;align-items:center;justify-content:center;font-size:16px">✕</span></div>
+          <div style="padding:22px 26px 24px">
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">担当者</label>
+            <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:13.5px;margin-bottom:16px">佐藤 健一（satoh）<span style="color:#8A96AC;font-size:11px">▼</span></div>
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">作業内容</label>
+            <div style="min-height:44px;border:1.5px solid #2563EB;border-radius:10px;padding:12px 14px;font-size:13.5px;margin-bottom:16px;box-shadow:0 0 0 4px rgba(37,99,235,.12)">給湯器交換工事 ／ 山田様邸</div>
+            <div style="display:flex;gap:14px;margin-bottom:16px">
+              <div style="flex:1"><label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">予定日</label><div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:13.5px" class="mono">2026-07-08</div></div>
+              <div style="flex:1"><label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">ステータス</label><div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:13.5px">作業中<span style="color:#8A96AC;font-size:11px">▼</span></div></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:6px"><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700">キャンセル</div><div style="flex:1.4;text-align:center;background:#2563EB;color:#fff;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(37,99,235,.3)">保存</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm dialog -->
+    <div style="flex:none">
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:10px">タスク完了確認ダイアログ（admin・employee共通）</div>
+      <div style="width:500px;height:520px;border-radius:16px;background:rgba(17,26,46,.55);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #E4E9F2">
+        <div style="width:380px;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden;text-align:center;padding:32px 30px 26px">
+          <div style="width:64px;height:64px;border-radius:50%;background:#E4F4EB;display:flex;align-items:center;justify-content:center;margin:0 auto 20px"><div style="width:26px;height:14px;border-left:4px solid #1FA25E;border-bottom:4px solid #1FA25E;transform:rotate(-45deg);margin-top:-6px"></div></div>
+          <div style="font-size:18px;font-weight:900;margin-bottom:10px">このタスクを完了しますか？</div>
+          <div style="font-size:13px;color:#5A6784;line-height:1.7;margin-bottom:8px">「給湯器交換工事 ／ 山田様邸」を<br>完了として報告します。</div>
+          <div style="font-size:11.5px;color:#B26A00;background:#FBF0DC;border-radius:8px;padding:8px 12px;margin-bottom:24px;display:inline-block">※ 完了後は編集・取り消しできません</div>
+          <div style="display:flex;gap:10px"><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:10px;padding:13px 0;font-size:14px;font-weight:700">キャンセル</div><div style="flex:1;text-align:center;background:#1FA25E;color:#fff;border-radius:10px;padding:13px 0;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(31,162,94,.3)">完了する</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 05 SETTINGS ===== -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <span style="font-family:'Roboto Mono',monospace;font-size:12px;font-weight:500;background:#16203A;color:#fff;border-radius:6px;padding:5px 10px">05</span>
+    <span style="font-size:19px;font-weight:900">設定画面</span>
+    <span style="font-size:13px;color:#8A96AC">— adminのみ / PC / ユーザー管理・パスワード変更</span>
+  </div>
+
+  <div style="margin-bottom:40px">
+    <div style="width:1180px;border-radius:14px;overflow:hidden;box-shadow:0 18px 46px rgba(16,26,54,.16);border:1px solid #E4E9F2">
+      <div style="height:38px;background:#fff;border-bottom:1px solid #EEF1F6;display:flex;align-items:center;gap:7px;padding:0 15px">
+        <span style="width:11px;height:11px;border-radius:50%;background:#FF5F57"></span><span style="width:11px;height:11px;border-radius:50%;background:#FEBC2E"></span><span style="width:11px;height:11px;border-radius:50%;background:#28C840"></span>
+        <div class="mono" style="margin-left:12px;font-size:11px;color:#8A96AC;background:#F4F6FA;border-radius:6px;padding:4px 12px">app.gemba-one.jp/settings</div>
+      </div>
+      <div style="display:flex;height:760px;background:#F4F6FA">
+        <aside style="width:220px;background:#111A2E;flex:none;padding:24px 16px;display:flex;flex-direction:column;color:#fff">
+          <div style="display:flex;align-items:center;gap:10px;padding:0 8px 26px">
+            <div style="width:32px;height:32px;border-radius:9px;background:#2563EB;display:flex;align-items:center;justify-content:center"><div style="width:13px;height:13px;border:3px solid #fff;border-radius:4px;transform:rotate(45deg)"></div></div>
+            <div style="font-size:16px;font-weight:900">Gemba One</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:500;margin-bottom:4px;color:#A9B4C9"><span style="display:grid;grid-template-columns:1fr 1fr;gap:2px;width:16px;height:16px"><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i><i style="background:currentColor;border-radius:2px"></i></span>ダッシュボード</div>
+          <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:500;margin-bottom:4px;color:#A9B4C9"><span style="display:flex;flex-direction:column;gap:3px;width:16px;height:16px;justify-content:center"><i style="height:2.5px;background:currentColor;border-radius:2px"></i><i style="height:2.5px;background:currentColor;border-radius:2px"></i><i style="height:2.5px;background:currentColor;border-radius:2px"></i></span>タスク一覧</div>
+          <div style="display:flex;align-items:center;gap:12px;background:#2563EB;border-radius:10px;padding:12px 14px;font-size:13.5px;font-weight:700;margin-bottom:4px;color:#fff"><span style="width:16px;height:16px;border:2.5px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center"><i style="width:4px;height:4px;border-radius:50%;background:currentColor"></i></span>設定</div>
+          <div style="flex:1"></div>
+          <div style="height:1px;background:rgba(255,255,255,.08);margin:8px 6px 12px"></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:6px 8px 14px"><div><div style="font-size:12.5px;font-weight:700">田中 社長</div><div class="mono" style="font-size:10.5px;color:#7E8AA3">admin</div></div></div>
+          <div style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:500;color:#A9B4C9;border:1px solid rgba(255,255,255,.1)"><span style="width:15px;height:15px;border:2.5px solid currentColor;border-radius:4px;border-right-color:transparent"></span>ログアウト</div>
+        </aside>
+        <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="height:70px;background:#fff;border-bottom:1px solid #E4E9F2;display:flex;align-items:center;justify-content:space-between;padding:0 30px;flex:none">
+            <div style="font-size:19px;font-weight:900">設定</div>
+          </div>
+          <div style="padding:26px 30px;overflow:auto;display:flex;gap:22px;align-items:flex-start">
+            <!-- User management -->
+            <div style="flex:1.7;background:#fff;border:1px solid #E4E9F2;border-radius:16px;overflow:hidden">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid #EEF1F6"><div style="font-size:15px;font-weight:900">従業員管理</div><div style="display:flex;align-items:center;gap:7px;background:#2563EB;color:#fff;border-radius:9px;padding:9px 15px;font-size:12.5px;font-weight:700"><span style="font-size:15px;line-height:1">+</span>従業員を追加</div></div>
+              <div style="display:grid;grid-template-columns:1.6fr 1.2fr 0.9fr 1fr;gap:12px;padding:12px 24px;font-size:11px;font-weight:700;color:#8A96AC;border-bottom:1px solid #EEF1F6;background:#FAFBFD"><span>氏名 / ユーザー名</span><span>ロール</span><span>状態</span><span style="text-align:right">操作</span></div>
+              <div style="display:grid;grid-template-columns:1.6fr 1.2fr 0.9fr 1fr;gap:12px;padding:15px 24px;align-items:center;border-bottom:1px solid #F4F6FA"><div style="display:flex;align-items:center;gap:10px"><div><div style="font-size:13px;font-weight:700">田中 太郎</div><div class="mono" style="font-size:10.5px;color:#8A96AC">tanaka</div></div></div><span><span style="background:#111A2E;color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">admin</span></span><span style="font-size:12px;color:#167C4A;font-weight:700">有効</span><span style="display:flex;gap:8px;justify-content:flex-end;color:#8A96AC;font-size:12px;font-weight:700"><span style="color:#2563EB">編集</span></span></div>
+              <div style="display:grid;grid-template-columns:1.6fr 1.2fr 0.9fr 1fr;gap:12px;padding:15px 24px;align-items:center;border-bottom:1px solid #F4F6FA"><div style="display:flex;align-items:center;gap:10px"><div><div style="font-size:13px;font-weight:700">佐藤 健一</div><div class="mono" style="font-size:10.5px;color:#8A96AC">satoh</div></div></div><span><span style="background:#F4F6FA;color:#5A6784;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">employee</span></span><span style="font-size:12px;color:#167C4A;font-weight:700">有効</span><span style="display:flex;gap:10px;justify-content:flex-end;font-size:12px;font-weight:700"><span style="color:#2563EB">編集</span><span style="color:#D14343">削除</span></span></div>
+              <div style="display:grid;grid-template-columns:1.6fr 1.2fr 0.9fr 1fr;gap:12px;padding:15px 24px;align-items:center"><div style="display:flex;align-items:center;gap:10px"><div><div style="font-size:13px;font-weight:700">鈴木 大輔</div><div class="mono" style="font-size:10.5px;color:#8A96AC">suzuki</div></div></div><span><span style="background:#F4F6FA;color:#5A6784;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">employee</span></span><span style="font-size:12px;color:#167C4A;font-weight:700">有効</span><span style="display:flex;gap:10px;justify-content:flex-end;font-size:12px;font-weight:700"><span style="color:#2563EB">編集</span><span style="color:#D14343">削除</span></span></div>
+            </div>
+            <!-- Password change -->
+            <div style="flex:1;background:#fff;border:1px solid #E4E9F2;border-radius:16px;padding:24px">
+              <div style="font-size:15px;font-weight:900;margin-bottom:4px">パスワード変更</div>
+              <div style="font-size:12px;color:#8A96AC;margin-bottom:22px">自分のログインパスワードを変更します</div>
+              <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">現在のパスワード</label>
+              <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:16px;letter-spacing:.2em;color:#16203A;margin-bottom:16px">••••••••</div>
+              <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">新しいパスワード</label>
+              <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:16px;letter-spacing:.2em;color:#16203A;margin-bottom:16px">••••••••••</div>
+              <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">新しいパスワード（確認）</label>
+              <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:16px;letter-spacing:.2em;color:#16203A;margin-bottom:22px">••••••••••</div>
+              <div style="text-align:center;background:#2563EB;color:#fff;border-radius:10px;padding:13px 0;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(37,99,235,.3)">変更を保存</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings dialogs: employee add / edit -->
+  <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:14px">従業員 追加・編集ダイアログ（adminのみ・「+従業員を追加」／「編集」から起動・流用）</div>
+  <div style="display:flex;gap:40px;flex-wrap:wrap;align-items:flex-start;margin-bottom:64px">
+    <!-- Add employee -->
+    <div style="flex:none">
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:10px">従業員を追加</div>
+      <div style="width:560px;height:520px;border-radius:16px;background:rgba(17,26,46,.55);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #E4E9F2">
+        <div style="width:420px;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden">
+          <div style="padding:22px 26px 0;display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:17px;font-weight:900">従業員を追加</div><div style="font-size:12px;color:#8A96AC;margin-top:3px">role は employee で登録されます・パスワードはこの画面で本設定します</div></div><span style="width:30px;height:30px;border-radius:8px;background:#F4F6FA;color:#8A96AC;display:flex;align-items:center;justify-content:center;font-size:16px">✕</span></div>
+          <div style="padding:22px 26px 24px">
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">氏名（表示名）</label>
+            <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:13.5px;color:#8A96AC;margin-bottom:16px">例）山本 三郎</div>
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">ユーザー名（ログインID）</label>
+            <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:13.5px;color:#8A96AC;margin-bottom:16px" class="mono">yamamoto</div>
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">パスワード</label>
+            <div style="height:44px;border:1.5px solid #2563EB;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:16px;letter-spacing:.2em;color:#16203A;margin-bottom:8px;box-shadow:0 0 0 4px rgba(37,99,235,.12)">••••••••</div>
+            <div style="font-size:11.5px;color:#B26A00;background:#FBF0DC;border-radius:8px;padding:8px 12px;margin-bottom:20px">※ 設定したパスワードは本人に別途通知してください</div>
+            <div style="display:flex;gap:10px"><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700">キャンセル</div><div style="flex:1.4;text-align:center;background:#2563EB;color:#fff;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(37,99,235,.3)">追加する</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Edit employee -->
+    <div style="flex:none">
+      <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:10px">従業員を編集</div>
+      <div style="width:560px;height:520px;border-radius:16px;background:rgba(17,26,46,.55);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #E4E9F2">
+        <div style="width:420px;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden">
+          <div style="padding:22px 26px 0;display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:17px;font-weight:900">従業員を編集</div><div style="font-size:12px;color:#8A96AC;margin-top:3px">ユーザー名は変更できません</div></div><span style="width:30px;height:30px;border-radius:8px;background:#F4F6FA;color:#8A96AC;display:flex;align-items:center;justify-content:center;font-size:16px">✕</span></div>
+          <div style="padding:22px 26px 24px">
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">氏名（表示名）</label>
+            <div style="height:44px;border:1.5px solid #2563EB;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:13.5px;margin-bottom:16px;box-shadow:0 0 0 4px rgba(37,99,235,.12)">佐藤 健一</div>
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">ユーザー名（ログインID）</label>
+            <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:13.5px;color:#8A96AC;margin-bottom:16px;background:#F7F9FC"><span class="mono">satoh</span><span style="font-size:11px">変更不可</span></div>
+            <label style="font-size:12px;font-weight:700;color:#5A6784;display:block;margin-bottom:7px">パスワード</label>
+            <div style="height:44px;border:1.5px solid #E4E9F2;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-size:16px;letter-spacing:.2em;color:#16203A;margin-bottom:8px">••••••••</div>
+            <div style="font-size:11.5px;color:#8A96AC;margin-bottom:22px">※ 空欄のままなら変更されません。パスワード変更は admin のみ可能です</div>
+            <div style="display:flex;gap:10px"><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700">キャンセル</div><div style="flex:1.4;text-align:center;background:#2563EB;color:#fff;border-radius:10px;padding:12px 0;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(37,99,235,.3)">保存</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Employee delete confirm -->
+  <div style="font-size:12px;font-weight:700;color:#8A96AC;margin-bottom:14px">従業員削除確認ダイアログ（adminのみ・「削除」ボタンから起動）</div>
+  <div style="margin-bottom:40px">
+    <div style="width:500px;height:420px;border-radius:16px;background:rgba(17,26,46,.55);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #E4E9F2">
+      <div style="width:380px;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.28);overflow:hidden;text-align:center;padding:32px 30px 26px">
+        <div style="width:64px;height:64px;border-radius:50%;background:#FBEAEA;display:flex;align-items:center;justify-content:center;margin:0 auto 20px"><div style="width:24px;height:24px;position:relative"><div style="position:absolute;left:11px;top:0;width:2px;height:24px;background:#D14343;transform:rotate(45deg)"></div><div style="position:absolute;left:11px;top:0;width:2px;height:24px;background:#D14343;transform:rotate(-45deg)"></div></div></div>
+        <div style="font-size:18px;font-weight:900;margin-bottom:10px">この従業員を削除しますか？</div>
+        <div style="font-size:13px;color:#5A6784;line-height:1.7;margin-bottom:8px">「佐藤 健一（satoh）」を一覧から削除します。<br>担当タスクの履歴は保持されます。</div>
+        <div style="font-size:11.5px;color:#B26A00;background:#FBF0DC;border-radius:8px;padding:8px 12px;margin-bottom:24px;display:inline-block">※ 削除後はログインできなくなります</div>
+        <div style="display:flex;gap:10px"><div style="flex:1;text-align:center;background:#fff;color:#5A6784;border:1.5px solid #E4E9F2;border-radius:10px;padding:13px 0;font-size:14px;font-weight:700">キャンセル</div><div style="flex:1;text-align:center;background:#D14343;color:#fff;border-radius:10px;padding:13px 0;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(209,67,67,.3)">削除する</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>
