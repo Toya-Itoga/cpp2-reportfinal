@@ -10,12 +10,22 @@
 - `.venv/`                - 仮想環境
 - `src/main.py`           - アプリ本体
 - `src/routers/`          - ルータ層
+- `src/routers/auth.py`       - 認証ルータ
+- `src/routers/dashboard.py`  - ダッシュボードルータ
+- `src/routers/tasks.py`      - タスク一覧ルータ
 - `src/services/`         - サービス層
+- `src/routers/`
 - `src/`
 - `src/`
 - `src/`
-- `src/`
-- `src/`
+- `src/database.py`       - データベース接続設定定義
+- `src/templates/`      - HTMLファイル
+- `src/templates/dashboard.html`   - ダッシュボード画面HTML
+- `src/templates/tasks`            - タスク一覧画面HTML
+- `src/static/js/dashboard.js`     - ダッシュボード画面JavaScript
+- `src/static/css/dashboard.css`   - ダッシュボード画面CSS
+- `src/templates/components/`      - コンポーネントHTML
+- `src/templates/task-/`
 - `config/`               - 設定・ドキュメント
 - `scripts/`              - 開発補助スクリプト
 - `scripts/setup_local_db.py`
