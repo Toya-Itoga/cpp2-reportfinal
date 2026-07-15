@@ -1,0 +1,128 @@
+{# templates/partials/tasks_content.html
+   タスク一覧画面 コンテンツ断片
+   HTMX ナビゲーション時と pages/tasks.html の両方で include される #}
+{% from "components/task_card.html" import task_card %}
+{% from "components/empty_state.html" import empty_state %}
+
+<div x-data="{
+  completedOpen: false,
+  loadCompleted() {
+    if (!this.completedOpen) {
+      this.completedOpen = true;
+      htmx.ajax('GET', '/tasks?include_completed=true', { target: '#completed-list', swap: 'innerHTML' });
+    } else {
+      this.completedOpen = false;
+    }
+  }
+}">
+
+  {# ─── ページヘッダ ─── #}
+  <div class="tasks-header">
+    <div class="tasks-header__left">
+      <h1 style="font-size:19px;font-weight:900;color:var(--color-ink)">タスク一覧</h1>
+    </div>
+  </div>
+
+  {# ─── フィルタバー ─── #}
+  <div class="tasks-filter-bar">
+    {# ステータスフィルタタブ #}
+    <div x-data="{ status: '{{ status_filter | default('all') }}' }" class="filter-tabs tasks-filter-bar__tabs">
+      {# すべて #}
+      <button class="filter-tabs__item"
+              :class="{ 'filter-tabs__item--active': status === 'all' }"
+              @click="status = 'all'"
+              hx-get="/tasks"
+              hx-target="#task-list"
+              hx-swap="innerHTML"
+              hx-push-url="false"
+              hx-indicator="#page-loader">
+        すべて
+      </button>
+      {# 未着手 #}
+      <button class="filter-tabs__item"
+              :class="{ 'filter-tabs__item--active': status === 'pending' }"
+              @click="status = 'pending'"
+              hx-get="/tasks?status=pending"
+              hx-target="#task-list"
+              hx-swap="innerHTML"
+              hx-push-url="false"
+              hx-indicator="#page-loader">
+        未着手
+      </button>
+      {# 作業中 #}
+      <button class="filter-tabs__item"
+              :class="{ 'filter-tabs__item--active': status === 'in_progress' }"
+              @click="status = 'in_progress'"
+              hx-get="/tasks?status=in_progress"
+              hx-target="#task-list"
+              hx-swap="innerHTML"
+              hx-push-url="false"
+              hx-indicator="#page-loader">
+        作業中
+      </button>
+    </div>
+
+    {# 担当者フィルタ (admin のみ) #}
+    {% if role == 'admin' %}
+      <div class="assignee-filter">
+        <span class="assignee-filter__label">担当者:</span>
+        <select class="assignee-filter__select"
+                hx-get="/tasks"
+                hx-target="#task-list"
+                hx-swap="innerHTML"
+                hx-push-url="false"
+                hx-trigger="change"
+                hx-indicator="#page-loader"
+                name="assignee">
+          <option value="">全員</option>
+          {% for emp in employees %}
+            <option value="{{ emp.username }}"
+                    {% if assignee_filter == emp.username %}selected{% endif %}>
+              {{ emp.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
+  </div>
+
+  {# ─── タスク一覧 (HTMX 差し替えターゲット) ─── #}
+  <div id="task-list">
+    {% include "partials/task_list.html" %}
+  </div>
+
+  {# ─── 完了済みセクション ─── #}
+  <div class="completed-section">
+    <button class="completed-section__toggle"
+            type="button"
+            @click="loadCompleted()"
+            aria-expanded="completedOpen"
+            aria-controls="completed-list">
+      <span x-text="completedOpen ? '完了済みタスクを隠す ▲' : '完了済みタスクを表示する ▼'">
+        完了済みタスクを表示する ▼
+      </span>
+    </button>
+
+    {# 完了済みタスクコンテナ (Alpine で表示切替、HTMX で内容取得) #}
+    <div id="completed-list"
+         class="completed-section__content"
+         x-show="completedOpen"
+         x-transition
+         style="display:none">
+      {# HTMX で /tasks?include_completed=true の結果が差し込まれる #}
+    </div>
+  </div>
+
+</div>
+
+{# ─── FAB: タスク追加 (admin のみ) ─── #}
+{% if role == 'admin' %}
+  <button class="fab"
+          hx-get="/tasks/new"
+          hx-target="#modal-root"
+          hx-swap="innerHTML"
+          hx-indicator="#page-loader"
+          aria-label="タスクを追加">
+    +
+  </button>
+{% endif %}

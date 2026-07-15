@@ -1,0 +1,12 @@
+{# templates/pages/settings.html
+   設定画面 (admin 専用)
+   app_shell レイアウトを継承する #}
+{% extends "layouts/app_shell.html" %}
+
+{% block title %}設定 — Gemba One{% endblock %}
+{% block page_css %}settings{% endblock %}
+{% block page_js %}settings{% endblock %}
+
+{% block content %}
+  {% include "partials/settings_content.html" %}
+{% endblock %}

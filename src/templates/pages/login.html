@@ -1,0 +1,86 @@
+{# templates/pages/login.html
+   ログイン画面
+   - 2カラム: 左=navyブランドパネル、右=ホワイトフォーム
+   - HTMX: hx-post="/login" でフォームフラグメントを差し替え #}
+{% extends "base.html" %}
+
+{% block title %}ログイン — Gemba One{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="/static/css/login.css">
+{% endblock %}
+
+{% block body %}
+<div class="login-page">
+  <div class="login-card">
+
+    {# ─── 左パネル: ブランド ─── #}
+    <div class="login-card__brand" aria-hidden="true">
+      <div class="login-card__logo-icon"></div>
+      <div class="login-card__logo-name">Gemba One</div>
+      <div class="login-card__logo-sub u-mono">© 2026 Gemba One</div>
+    </div>
+
+    {# ─── 右パネル: ログインフォーム ─── #}
+    <div class="login-card__form-panel">
+      <h1 class="login-card__title">ログイン</h1>
+      <p class="login-card__subtitle">ユーザー名とパスワードを入力してください</p>
+
+      {# HTMX: outerHTML swap で エラー表示を含むフォームごと差し替え #}
+      <form class="login-form"
+            id="login-form"
+            hx-post="/login"
+            hx-target="#login-form"
+            hx-swap="outerHTML"
+            hx-indicator="#page-loader">
+
+        {# エラーメッセージ #}
+        {% if error %}
+          <div class="alert alert--error" role="alert">{{ error }}</div>
+        {% endif %}
+
+        {# ユーザー名フィールド #}
+        <div class="login-form__field">
+          <label class="login-form__label" for="username">ユーザー名</label>
+          <input class="login-form__input"
+                 type="text"
+                 id="username"
+                 name="username"
+                 autocomplete="username"
+                 required
+                 autofocus
+                 placeholder="username">
+        </div>
+
+        {# パスワードフィールド #}
+        <div class="login-form__field">
+          <label class="login-form__label" for="password">パスワード</label>
+          <input class="login-form__input"
+                 type="password"
+                 id="password"
+                 name="password"
+                 autocomplete="current-password"
+                 required
+                 placeholder="••••••••">
+        </div>
+
+        {# ログインボタン #}
+        <button type="submit" class="login-form__btn">
+          ログイン
+        </button>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+{# ページローダー #}
+<div id="page-loader" class="page-loader">
+  <div class="page-loader__spinner"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="/static/js/login.js"></script>
+{% endblock %}

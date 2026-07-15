@@ -1,0 +1,59 @@
+{# templates/components/task_card.html
+   タスクカードコンポーネント
+   macro: task_card(task, role)
+     task : タスク辞書 (task_id, title, assignee_id, assignee_name,
+                       scheduled_date, status, status_variant)
+     role : 'admin' | 'employee' — 操作ボタンの出し分けに使用 #}
+{% from "components/status_badge.html" import status_badge %}
+
+{% macro task_card(task, role) %}
+<article class="task-card task-card--{{ task.status_variant }}{% if task.status == 'completed' %} task-card--done{% endif %}">
+
+  {# ─── ヘッダ (タイトル + バッジ) ─── #}
+  <header class="task-card__head">
+    <h3 class="task-card__title">{{ task.title }}</h3>
+    {{ status_badge(task.status) }}
+  </header>
+
+  {# ─── メタ情報 (担当者 + 日付) ─── #}
+  <div class="task-card__meta">
+    <span class="task-card__assignee">
+      <span class="avatar avatar--sm" aria-hidden="true">{{ task.assignee_name[0] if task.assignee_name else '?' }}</span>
+      {{ task.assignee_name }}
+    </span>
+    <time class="task-card__date u-mono" datetime="{{ task.scheduled_date }}">
+      {{ task.scheduled_date }}
+    </time>
+  </div>
+
+  {# ─── アクション ─── #}
+  <footer class="task-card__actions">
+    {% if task.status != 'completed' %}
+      {# 完了報告ボタン (admin・employee 共通) #}
+      <button class="btn btn--complete"
+              hx-get="/tasks/{{ task.task_id }}/confirm?assignee_id={{ task.assignee_id }}"
+              hx-target="#modal-root"
+              hx-swap="innerHTML"
+              hx-indicator="#page-loader"
+              aria-label="{{ task.title }}を完了する">
+        完了
+      </button>
+      {# 編集ボタン (admin のみ) #}
+      {% if role == 'admin' %}
+        <button class="btn btn--ghost"
+                hx-get="/tasks/{{ task.task_id }}/edit?assignee_id={{ task.assignee_id }}"
+                hx-target="#modal-root"
+                hx-swap="innerHTML"
+                hx-indicator="#page-loader"
+                aria-label="{{ task.title }}を編集する">
+          編集
+        </button>
+      {% endif %}
+    {% else %}
+      {# 完了済みラベル #}
+      <span class="task-card__done-label">完了済み</span>
+    {% endif %}
+  </footer>
+
+</article>
+{% endmacro %}

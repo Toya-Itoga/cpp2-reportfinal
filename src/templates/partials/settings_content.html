@@ -1,0 +1,107 @@
+{# templates/partials/settings_content.html
+   設定画面 コンテンツ断片
+   HTMX ナビゲーション時と pages/settings.html の両方で include される #}
+
+<div class="settings-layout">
+
+  {# ─── 左カラム: 従業員管理 ─── #}
+  <div class="settings-layout__main">
+    <div class="settings-panel">
+
+      {# パネルヘッダ #}
+      <div class="settings-panel__head">
+        <h2 class="settings-panel__title">従業員管理</h2>
+        <button class="btn btn--primary"
+                style="height:36px;font-size:13px;padding:0 14px"
+                hx-get="/settings/users/new"
+                hx-target="#modal-root"
+                hx-swap="innerHTML"
+                hx-indicator="#page-loader"
+                aria-label="従業員を追加">
+          + 従業員を追加
+        </button>
+      </div>
+
+      {# 従業員一覧テーブル (HTMX 差し替えターゲット) #}
+      <div id="employee-list" class="settings-panel__body">
+        {% include "partials/employee_list.html" %}
+      </div>
+
+    </div>
+  </div>
+
+  {# ─── 右カラム: パスワード変更 ─── #}
+  <div class="settings-layout__aside">
+    <div class="settings-panel">
+
+      {# パネルヘッダ #}
+      <div class="settings-panel__head">
+        <h2 class="settings-panel__title">パスワード変更</h2>
+      </div>
+
+      {# パスワード変更フォーム #}
+      <div class="settings-panel__body settings-panel__body--padded">
+        <form x-data="{
+                newPw: '',
+                confirmPw: '',
+                get match() { return this.newPw !== '' && this.newPw === this.confirmPw; }
+              }"
+              hx-post="/settings/password"
+              hx-target="#pw-result"
+              hx-swap="innerHTML"
+              hx-indicator="#page-loader">
+
+          {# 結果表示エリア #}
+          <div id="pw-result"></div>
+
+          {# 現在のパスワード #}
+          <div class="field">
+            <label class="field__label" for="current_password">現在のパスワード</label>
+            <input class="field__input"
+                   type="password"
+                   id="current_password"
+                   name="current_password"
+                   autocomplete="current-password"
+                   required>
+          </div>
+
+          {# 新しいパスワード #}
+          <div class="field">
+            <label class="field__label" for="new_password">新しいパスワード</label>
+            <input class="field__input"
+                   type="password"
+                   id="new_password"
+                   name="new_password"
+                   autocomplete="new-password"
+                   x-model="newPw"
+                   required>
+          </div>
+
+          {# 確認用パスワード #}
+          <div class="field">
+            <label class="field__label" for="confirm_password">確認用パスワード</label>
+            <input class="field__input"
+                   type="password"
+                   id="confirm_password"
+                   name="confirm_password"
+                   autocomplete="new-password"
+                   x-model="confirmPw"
+                   :class="{ 'field__input--error': confirmPw && !match }"
+                   required>
+            <span class="field__error" x-show="confirmPw && !match" x-cloak>
+              パスワードが一致しません
+            </span>
+          </div>
+
+          <button class="btn btn--primary btn--block"
+                  type="submit"
+                  :disabled="!match">
+            変更を保存
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>

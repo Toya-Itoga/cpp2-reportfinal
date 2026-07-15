@@ -1,0 +1,63 @@
+/* static/css/tokens.css
+   Gemba One デザイントークン定義
+   全画面で共通して使用するカラー・タイポグラフィ・シャドウ・スペーシング */
+
+:root {
+  /* ─── Brand / Primary ─── */
+  --color-primary:        #2563EB;  /* プライマリ（ボタン・アクティブ・リンク） */
+  --color-primary-dark:   #1B4CD6;  /* ホバー・押下 */
+  --color-primary-darker: #17399E;  /* アクティブ押下 */
+  --color-primary-light:  #ECF2FE;  /* 選択背景・アバター背景 */
+  --color-primary-tint:   #E7EFFE;  /* バッジ背景（作業中） */
+
+  /* ─── Navy（サイドバー） ─── */
+  --color-navy:      #111A2E;
+  --color-navy-soft: #1B2740;
+
+  /* ─── Ink（テキスト） ─── */
+  --color-ink:   #16203A;  /* 見出し・本文 */
+  --color-ink-2: #5A6784;  /* サブテキスト */
+  --color-ink-3: #8A96AC;  /* キャプション・プレースホルダ */
+  --color-ink-4: #A9B4C9;  /* 非アクティブラベル */
+
+  /* ─── Surface / BG ─── */
+  --color-bg:          #F4F6FA;  /* アプリ背景 */
+  --color-bg-outer:    #EEF1F6;  /* 完了済みセクション背景 */
+  --color-surface:     #FFFFFF;  /* カード・パネル */
+  --color-border:      #E4E9F2;  /* 罫線・枠線 */
+  --color-border-soft: #EEF1F6;  /* 淡い区切り線 */
+
+  /* ─── Status ─── */
+  --color-pending:       #E08A00;
+  --color-pending-ink:   #B26A00;
+  --color-pending-bg:    #FBF0DC;
+  --color-progress:      #2563EB;
+  --color-progress-ink:  #1B4CD6;
+  --color-progress-bg:   #E7EFFE;
+  --color-completed:     #1FA25E;
+  --color-completed-ink: #167C4A;
+  --color-completed-bg:  #E4F4EB;
+
+  /* ─── Danger ─── */
+  --color-danger:      #D14343;
+  --color-danger-dark: #B03030;
+
+  /* ─── Radius ─── */
+  --radius-card: 16px;
+  --radius-field: 10px;
+  --radius-pill: 999px;
+
+  /* ─── Shadow ─── */
+  --shadow-card: 0 1px 3px rgba(16, 26, 54, .06);
+  --shadow-pop:  0 24px 60px rgba(0, 0, 0, .28);
+  --shadow-btn:  0 4px 12px rgba(37, 99, 235, .30);
+
+  /* ─── Layout ─── */
+  --sidebar-w: 220px;
+  --topbar-h:  70px;
+
+  /* ─── Transition ─── */
+  --transition-fast: .15s ease;
+  --transition-base: .2s cubic-bezier(.2, .7, .2, 1);
+  --transition-slow: .35s cubic-bezier(.2, .7, .2, 1);
+}

@@ -1,0 +1,26 @@
+{# templates/components/modal.html
+   モーダルラッパーコンポーネント
+   macro: modal_wrapper(title)
+     title: モーダルのタイトル文字列
+   使用方法: caller() でボディコンテンツを渡す #}
+{% macro modal_wrapper(title) %}
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+  {# ─── ヘッダ ─── #}
+  <div class="modal__head">
+    <h2 class="modal__title" id="modal-title">{{ title }}</h2>
+    <button class="modal__close"
+            type="button"
+            @click="close()"
+            aria-label="閉じる">
+      ✕
+    </button>
+  </div>
+
+  {# ─── ボディ ─── #}
+  <div class="modal__body">
+    {{ caller() }}
+  </div>
+
+</div>
+{% endmacro %}

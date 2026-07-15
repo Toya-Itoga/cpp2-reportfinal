@@ -1,0 +1,13 @@
+{# templates/components/empty_state.html
+   0件状態の表示コンポーネント
+   macro: empty_state(title, text, icon)
+     title: 見出しテキスト
+     text : 説明テキスト
+     icon : 絵文字アイコン文字列 (デフォルト: '📋') #}
+{% macro empty_state(title, text, icon='📋') %}
+<div class="empty-state" role="status" aria-live="polite">
+  <div class="empty-state__icon" aria-hidden="true">{{ icon }}</div>
+  <div class="empty-state__title">{{ title }}</div>
+  <p class="empty-state__text">{{ text }}</p>
+</div>
+{% endmacro %}

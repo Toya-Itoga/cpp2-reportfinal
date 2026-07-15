@@ -1,0 +1,133 @@
+{# templates/layouts/mobile_shell.html
+   モバイル向けシェルレイアウト (employee のスマホ表示に使用)
+   サイドバーなし、上部固定ヘッダー + コンテンツ縦スタック #}
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="/static/css/{% block page_css %}tasks{% endblock %}.css">
+{% endblock %}
+
+{% block body_attrs %}x-data="modalRoot()" @keydown.escape.window="close()"{% endblock %}
+
+{% block body %}
+
+{# ─── モバイルヘッダー ─── #}
+<header class="mobile-header">
+  <div class="mobile-header__logo">
+    <span class="mobile-header__icon"></span>
+    <span class="mobile-header__name">Gemba One</span>
+  </div>
+  <div class="mobile-header__right">
+    <span class="mobile-header__user">{{ user.name | default('') }}</span>
+    <form action="/logout" method="post" style="display:inline">
+      <button type="submit" class="mobile-header__logout">ログアウト</button>
+    </form>
+  </div>
+</header>
+
+{# ─── ページコンテンツ ─── #}
+<main class="mobile-body" id="main-content">
+  {% block content %}{% endblock %}
+</main>
+
+{# ─── モーダルルート ─── #}
+<div id="modal-root"
+     class="modal-overlay"
+     x-show="open"
+     x-transition.opacity
+     @click.self="close()"
+     @close-modal.window="close()"
+     @htmx:after-swap.window="if ($event.detail.target.id === 'modal-root') open = true"
+     style="display:none">
+</div>
+
+{# ─── トーストルート ─── #}
+<div id="toast-root"></div>
+
+<script>
+function modalRoot() {
+  return {
+    open: false,
+    close() {
+      this.open = false;
+      const root = document.getElementById('modal-root');
+      if (root) root.innerHTML = '';
+    },
+  };
+}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="/static/js/tasks.js"></script>
+{% endblock %}
+
+<style>
+/* ─── モバイルヘッダー ─── */
+.mobile-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--color-navy);
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-header__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-header__icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: var(--color-primary);
+  border-radius: 6px;
+  transform: rotate(45deg);
+}
+
+.mobile-header__name {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.mobile-header__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-header__user {
+  font-size: 13px;
+  color: rgba(255,255,255,.7);
+}
+
+.mobile-header__logout {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,.25);
+  color: rgba(255,255,255,.7);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.mobile-header__logout:hover {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: #fff;
+}
+
+.mobile-body {
+  padding: 16px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+}
+</style>

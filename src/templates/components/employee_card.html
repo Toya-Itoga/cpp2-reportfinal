@@ -1,0 +1,57 @@
+{# templates/components/employee_card.html
+   従業員進捗カードコンポーネント (ダッシュボード用)
+   macro: employee_card(emp)
+     emp: {username, name, done, progress, pending, total, done_pct} #}
+{% macro employee_card(emp) %}
+{# 完了+作業中の割合を計算 #}
+{% set done_pct    = emp.done_pct | default(0) %}
+{% set prog_pct    = ((emp.progress / emp.total * 100) | round | int) if emp.total > 0 else 0 %}
+
+<a href="/tasks?assignee={{ emp.username }}"
+   class="employee-card"
+   hx-get="/tasks?assignee={{ emp.username }}"
+   hx-target="#main-content"
+   hx-push-url="true"
+   hx-swap="innerHTML"
+   hx-indicator="#page-loader"
+   aria-label="{{ emp.name }}のタスク一覧を表示">
+
+  {# ─── ヘッダ ─── #}
+  <div class="employee-card__head">
+    <div class="employee-card__avatar" aria-hidden="true">
+      {{ emp.name[0] if emp.name else '?' }}
+    </div>
+    <div>
+      <div class="employee-card__name">{{ emp.name }}</div>
+      <div class="employee-card__username">@{{ emp.username }}</div>
+    </div>
+  </div>
+
+  {# ─── 進捗バー ─── #}
+  <div class="employee-card__bar" role="progressbar"
+       aria-valuenow="{{ done_pct }}" aria-valuemin="0" aria-valuemax="100"
+       aria-label="完了率 {{ done_pct }}%">
+    <div class="employee-card__bar-seg employee-card__bar-seg--done"
+         style="width:{{ done_pct }}%"></div>
+    <div class="employee-card__bar-seg employee-card__bar-seg--progress"
+         style="width:{{ prog_pct }}%"></div>
+  </div>
+
+  {# ─── 統計数値 ─── #}
+  <div class="employee-card__stats">
+    <div class="employee-card__stat employee-card__stat--done">
+      <span class="employee-card__stat-value">{{ emp.done }}</span>
+      <span class="employee-card__stat-label">完了</span>
+    </div>
+    <div class="employee-card__stat employee-card__stat--progress">
+      <span class="employee-card__stat-value">{{ emp.progress }}</span>
+      <span class="employee-card__stat-label">作業中</span>
+    </div>
+    <div class="employee-card__stat employee-card__stat--pending">
+      <span class="employee-card__stat-value">{{ emp.pending }}</span>
+      <span class="employee-card__stat-label">未着手</span>
+    </div>
+  </div>
+
+</a>
+{% endmacro %}

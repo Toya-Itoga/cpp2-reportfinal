@@ -1,0 +1,23 @@
+{# templates/partials/task_list.html
+   タスク一覧フラグメント
+   フィルタリング後に #task-list へ差し込まれる断片
+   また、タスク追加・更新・完了後の一覧再描画にも使用する #}
+{% from "components/task_card.html" import task_card %}
+{% from "components/empty_state.html" import empty_state %}
+
+{# 完了済みを除いたタスクのみ表示 #}
+{% set active_tasks = tasks | selectattr('status', 'ne', 'completed') | list %}
+
+{% if active_tasks %}
+  <div class="task-grid">
+    {% for task in active_tasks %}
+      {{ task_card(task, role) }}
+    {% endfor %}
+  </div>
+{% else %}
+  {{ empty_state(
+      title='タスクなし',
+      text='現在表示できるタスクがありません。',
+      icon='✅'
+  ) }}
+{% endif %}

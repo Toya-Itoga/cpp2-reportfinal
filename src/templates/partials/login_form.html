@@ -1,0 +1,48 @@
+{# templates/partials/login_form.html
+   ログインフォームフラグメント
+   POST /login 失敗時にこのフラグメントで #login-form を outerHTML 差し替えする
+   エラーメッセージをフォーム上部に表示する #}
+
+<form class="login-form"
+      id="login-form"
+      hx-post="/login"
+      hx-target="#login-form"
+      hx-swap="outerHTML"
+      hx-indicator="#page-loader">
+
+  {# エラーメッセージ #}
+  {% if error %}
+    <div class="alert alert--error" role="alert">{{ error }}</div>
+  {% endif %}
+
+  {# ユーザー名フィールド #}
+  <div class="login-form__field">
+    <label class="login-form__label" for="username">ユーザー名</label>
+    <input class="login-form__input"
+           type="text"
+           id="username"
+           name="username"
+           autocomplete="username"
+           required
+           autofocus
+           placeholder="username">
+  </div>
+
+  {# パスワードフィールド #}
+  <div class="login-form__field">
+    <label class="login-form__label" for="password">パスワード</label>
+    <input class="login-form__input"
+           type="password"
+           id="password"
+           name="password"
+           autocomplete="current-password"
+           required
+           placeholder="••••••••">
+  </div>
+
+  {# ログインボタン #}
+  <button type="submit" class="login-form__btn">
+    ログイン
+  </button>
+
+</form>

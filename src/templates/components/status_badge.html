@@ -1,0 +1,17 @@
+{# templates/components/status_badge.html
+   ステータスバッジコンポーネント
+   macro: status_badge(status)
+     status: 'pending' | 'in_progress' | 'completed' #}
+{% macro status_badge(status) %}
+  {# ステータス → 表示ラベルと BEM 修飾子のマッピング #}
+  {% set status_map = {
+    'pending':     ('未着手', 'pending'),
+    'in_progress': ('作業中', 'progress'),
+    'completed':   ('完了',   'completed')
+  } %}
+  {% set label, mod = status_map.get(status, ('不明', 'pending')) %}
+  <span class="status-badge status-badge--{{ mod }}" role="status" aria-label="{{ label }}">
+    <span class="status-badge__dot" aria-hidden="true"></span>
+    {{ label }}
+  </span>
+{% endmacro %}

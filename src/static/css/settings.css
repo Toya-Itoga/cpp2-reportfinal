@@ -1,0 +1,91 @@
+/* static/css/settings.css
+   設定画面専用スタイル */
+
+/* ─── 2カラムレイアウト ─── */
+.settings-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  animation: fadeSlideUp .35s cubic-bezier(.2, .7, .2, 1);
+}
+
+.settings-layout__main {
+  flex: 1.7;
+  min-width: 0;
+}
+
+.settings-layout__aside {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .settings-layout {
+    flex-direction: column;
+  }
+  .settings-layout__main,
+  .settings-layout__aside {
+    width: 100%;
+  }
+}
+
+/* ─── セクションパネル ─── */
+.settings-panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.settings-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-panel__title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--color-ink);
+}
+
+.settings-panel__body {
+  padding: 0;
+}
+
+/* パスワード変更パネルの body は padding あり */
+.settings-panel__body--padded {
+  padding: 20px 24px;
+}
+
+/* ─── 従業員テーブルラッパー ─── */
+.employee-table-wrap {
+  overflow-x: auto;
+}
+
+/* ─── パスワード変更結果 ─── */
+#pw-result:empty {
+  display: none;
+}
+
+/* ─── 役割バッジ ─── */
+.role-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.role-badge--admin {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.role-badge--employee {
+  background: var(--color-bg);
+  color: var(--color-ink-2);
+  border: 1px solid var(--color-border);
+}

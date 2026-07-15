@@ -1,0 +1,58 @@
+{# templates/partials/employee_delete_confirm.html
+   従業員削除確認ダイアログフラグメント
+   GET /settings/users/{username}/delete-confirm → #modal-root に差し込まれる
+   確定: POST /settings/users/{username}/deactivate → #employee-list を再描画 #}
+
+<div class="modal" role="dialog" aria-modal="true"
+     aria-labelledby="delete-confirm-title">
+
+  {# ─── ヘッダ ─── #}
+  <div class="modal__head">
+    <h2 class="modal__title" id="delete-confirm-title">従業員を削除</h2>
+    <button class="modal__close" type="button"
+            @click="close()" aria-label="閉じる">✕</button>
+  </div>
+
+  {# ─── ボディ ─── #}
+  <div class="modal__body">
+    <p style="font-size:14px;color:var(--color-ink);margin-bottom:12px;font-weight:700">
+      この従業員を削除しますか？
+    </p>
+
+    {# 対象ユーザー情報 #}
+    <div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
+      <span class="avatar avatar--lg">{{ target_user.name[0] if target_user.name else '?' }}</span>
+      <div>
+        <p style="font-size:14px;font-weight:700;color:var(--color-ink)">{{ target_user.name }}</p>
+        <p style="font-size:12px;color:var(--color-ink-3);font-family:'Roboto Mono',monospace">
+          @{{ target_user.username }}
+        </p>
+      </div>
+    </div>
+
+    {# 注意文 #}
+    <div class="alert alert--warn" role="alert">
+      <strong>注意:</strong> 削除すると一覧から非表示になります。
+      担当タスクの履歴は保持されます。
+    </div>
+  </div>
+
+  {# ─── フッター ─── #}
+  <div class="modal__footer">
+    <button type="button" class="btn btn--secondary" @click="close()">
+      キャンセル
+    </button>
+    <button class="btn btn--danger"
+            x-data="{ sending: false }"
+            @click="sending = true"
+            :disabled="sending"
+            hx-post="/settings/users/{{ target_user.username }}/deactivate"
+            hx-target="#employee-list"
+            hx-swap="innerHTML"
+            hx-indicator="#page-loader"
+            aria-label="{{ target_user.name }}を削除する">
+      削除する
+    </button>
+  </div>
+
+</div>

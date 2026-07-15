@@ -1,0 +1,9 @@
+{# templates/partials/pw_change_result.html
+   パスワード変更結果フラグメント
+   POST /settings/password のレスポンスとして #pw-result に差し込まれる #}
+
+{% if error %}
+  <div class="alert alert--error" role="alert" style="margin-bottom:16px">{{ error }}</div>
+{% elif success %}
+  <div class="alert alert--success" role="alert" style="margin-bottom:16px">{{ success }}</div>
+{% endif %}

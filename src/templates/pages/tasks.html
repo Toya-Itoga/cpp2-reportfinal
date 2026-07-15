@@ -1,0 +1,12 @@
+{# templates/pages/tasks.html
+   タスク一覧画面 (admin / employee 共通)
+   app_shell レイアウトを継承する #}
+{% extends "layouts/app_shell.html" %}
+
+{% block title %}タスク一覧 — Gemba One{% endblock %}
+{% block page_css %}tasks{% endblock %}
+{% block page_js %}tasks{% endblock %}
+
+{% block content %}
+  {% include "partials/tasks_content.html" %}
+{% endblock %}

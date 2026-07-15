@@ -1,0 +1,54 @@
+{# templates/components/topbar.html
+   ページトップバーコンポーネント
+   macro: topbar(title, user)
+     title : ページタイトル文字列
+     user  : JWTペイロード辞書 {username, name, role} #}
+{% macro topbar(title, user) %}
+<div class="topbar">
+  {# ─── 左：ページタイトル ─── #}
+  <h1 class="topbar__title">{{ title }}</h1>
+
+  {# ─── 右：今日の日付 ─── #}
+  <div class="topbar__actions">
+    <time class="topbar__date u-mono">
+      {# Jinja2 の now() は使えないため、テンプレート変数 today から表示 #}
+      {{ today | default('') }}
+    </time>
+  </div>
+</div>
+
+<style>
+.topbar {
+  height: var(--topbar-h);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.topbar__title {
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--color-ink);
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.topbar__date {
+  font-size: 12.5px;
+  color: var(--color-ink-2);
+}
+
+@media (max-width: 768px) {
+  .topbar { padding: 0 16px; }
+  .topbar__title { font-size: 16px; }
+}
+</style>
+{% endmacro %}

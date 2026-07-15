@@ -1,0 +1,59 @@
+{# templates/partials/task_confirm.html
+   タスク完了確認ダイアログフラグメント
+   GET /tasks/{id}/confirm → #modal-root に差し込まれる
+   確定: POST /tasks/{id}/complete → #task-list を再描画・モーダルクローズ #}
+
+<div class="modal" role="dialog" aria-modal="true"
+     aria-labelledby="confirm-title">
+
+  {# ─── ヘッダ ─── #}
+  <div class="modal__head">
+    <h2 class="modal__title" id="confirm-title">完了確認</h2>
+    <button class="modal__close" type="button"
+            @click="close()" aria-label="閉じる">✕</button>
+  </div>
+
+  {# ─── ボディ ─── #}
+  <div class="modal__body">
+    <p style="font-size:14px;color:var(--color-ink);margin-bottom:12px;font-weight:700">
+      このタスクを完了しますか？
+    </p>
+
+    {# タスク名の表示 #}
+    <div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;margin-bottom:14px">
+      <p style="font-size:13px;color:var(--color-ink-2);margin-bottom:4px">対象タスク</p>
+      <p style="font-size:14px;font-weight:700;color:var(--color-ink)">{{ task.title }}</p>
+      <p style="font-size:12px;color:var(--color-ink-3);margin-top:4px">
+        担当: {{ task.assignee_name }} ／ {{ task.scheduled_date }}
+      </p>
+    </div>
+
+    {# 注意文 #}
+    <div class="alert alert--warn" role="alert">
+      <strong>注意:</strong> 完了後は編集・取り消しができません。
+    </div>
+  </div>
+
+  {# ─── フッター ─── #}
+  <div class="modal__footer">
+    <button type="button" class="btn btn--secondary" @click="close()">
+      キャンセル
+    </button>
+
+    {# 完了ボタン: 二重送信防止のため Alpine で sending 状態を管理 #}
+    <button class="btn btn--complete-solid"
+            x-data="{ sending: false }"
+            @click="sending = true"
+            :disabled="sending"
+            hx-post="/tasks/{{ task.task_id }}/complete"
+            hx-vals='{"assignee_id": "{{ task.assignee_id }}"}'
+            hx-target="#task-list"
+            hx-swap="innerHTML"
+            hx-indicator="#page-loader"
+            aria-label="完了を確定する">
+      <span x-show="!sending">完了する</span>
+      <span x-show="sending">処理中...</span>
+    </button>
+  </div>
+
+</div>

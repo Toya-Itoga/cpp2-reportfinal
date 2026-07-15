@@ -1,0 +1,126 @@
+{# templates/layouts/app_shell.html
+   サイドバー付きアプリケーションシェルレイアウト (PC / admin 向け)
+   サイドバーは固定コンポーネントとして一度だけレンダリングし、
+   メインコンテンツ (#main-content) のみ HTMX で差し替える #}
+{% from "components/sidebar.html" import sidebar %}
+{% from "components/topbar.html"  import topbar %}
+
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="/static/css/{% block page_css %}base{% endblock %}.css">
+  <style>
+  /* アプリシェルレイアウト */
+  .app-shell {
+    display: flex;
+    min-height: 100vh;
+  }
+  .app-shell__sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 200;
+    overflow-y: auto;
+  }
+  .app-shell__main {
+    flex: 1;
+    margin-left: var(--sidebar-w);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .app-shell__header {
+    height: var(--topbar-h);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .app-shell__body {
+    flex: 1;
+    padding: 28px 32px;
+    overflow-x: hidden;
+  }
+  @media (max-width: 768px) {
+    .app-shell__sidebar { display: none; }
+    .app-shell__main    { margin-left: 0; }
+    .app-shell__body    { padding: 16px; }
+  }
+  /* Alpine.js x-cloak 対応 */
+  [x-cloak] { display: none !important; }
+  </style>
+{% endblock %}
+
+{% block body_attrs %}x-data="modalRoot()" @keydown.escape.window="close()"{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+
+  {# ─── サイドバー（固定・差し替え対象外） ─── #}
+  <aside class="app-shell__sidebar"
+         style="animation: sidebarIn .4s cubic-bezier(.2,.7,.2,1)">
+    {{ sidebar(role=role, active=active_page | default('')) }}
+  </aside>
+
+  {# ─── メインエリア ─── #}
+  <div class="app-shell__main">
+
+    {# トップバー #}
+    <header class="app-shell__header">
+      {{ topbar(title=page_title | default('Gemba One'), user=user) }}
+    </header>
+
+    {# ページコンテンツ (HTMX 差し替えターゲット) #}
+    <main class="app-shell__body" id="main-content">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>{# /.app-shell__main #}
+
+</div>{# /.app-shell #}
+
+{# ─── モーダルルート (Alpine.js で開閉管理) ─── #}
+<div id="modal-root"
+     class="modal-overlay"
+     x-show="open"
+     x-transition:enter="transition ease-out duration-150"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-120"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     @click.self="close()"
+     @close-modal.window="close()"
+     @htmx:after-swap.window="if ($event.detail && $event.detail.target && $event.detail.target.id === 'modal-root') open = true"
+     style="display:none">
+</div>
+
+{# ─── トーストルート ─── #}
+<div id="toast-root"></div>
+
+{# ─── Alpine.js グローバル関数 ─── #}
+<script>
+/**
+ * モーダルルートの Alpine.js コンポーネント定義
+ * open: モーダルの開閉状態フラグ
+ * close(): モーダルを閉じてコンテンツをクリアする
+ */
+function modalRoot() {
+  return {
+    open: false,
+    close() {
+      this.open = false;
+      const root = document.getElementById('modal-root');
+      if (root) root.innerHTML = '';
+    },
+  };
+}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="/static/js/{% block page_js %}dashboard{% endblock %}.js"></script>
+{% endblock %}

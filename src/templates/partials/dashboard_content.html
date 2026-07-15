@@ -1,0 +1,41 @@
+{# templates/partials/dashboard_content.html
+   ダッシュボード コンテンツ断片
+   HTMX ナビゲーション時と pages/dashboard.html の両方で include される #}
+{% from "components/kpi_card.html"      import kpi_card %}
+{% from "components/employee_card.html" import employee_card %}
+{% from "components/empty_state.html"   import empty_state %}
+
+<div class="dashboard">
+
+  {# ─── KPI カードグリッド ─── #}
+  <section aria-label="本日のサマリー">
+    <div class="kpi-grid">
+      {{ kpi_card('本日の完了予定', today_total, '') }}
+      {{ kpi_card('完了済み', completed_count, 'completed') }}
+      {{ kpi_card('未完了', pending_count, 'pending') }}
+    </div>
+  </section>
+
+  {# ─── 従業員進捗セクション ─── #}
+  <section aria-label="従業員別進捗">
+    <div class="section-header">
+      <h2 class="section-header__title">本日の従業員進捗</h2>
+      <span class="dashboard__date-label u-mono">{{ today }}</span>
+    </div>
+
+    {% if by_employee %}
+      <div class="employee-grid">
+        {% for emp in by_employee %}
+          {{ employee_card(emp) }}
+        {% endfor %}
+      </div>
+    {% else %}
+      {{ empty_state(
+          title='従業員データなし',
+          text='アクティブな従業員が登録されていません。設定から従業員を追加してください。',
+          icon='👤'
+      ) }}
+    {% endif %}
+  </section>
+
+</div>

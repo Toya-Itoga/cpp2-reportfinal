@@ -1,0 +1,14 @@
+{# templates/components/kpi_card.html
+   KPIカードコンポーネント (ダッシュボード用)
+   macro: kpi_card(label, value, variant)
+     label  : 表示ラベル文字列
+     value  : 表示数値 (int)
+     variant: '' | 'completed' | 'pending' — 色スタイルの切り替え #}
+{% macro kpi_card(label, value, variant) %}
+<div class="kpi-card{% if variant %} kpi-card--{{ variant }}{% endif %}">
+  <div class="kpi-card__label">{{ label }}</div>
+  <div class="kpi-card__value u-mono">
+    {{ value }}<span class="kpi-card__unit">件</span>
+  </div>
+</div>
+{% endmacro %}

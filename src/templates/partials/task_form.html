@@ -1,0 +1,114 @@
+{# templates/partials/task_form.html
+   タスク 追加・編集 共用フォームフラグメント
+   新規作成: task が None → POST /tasks
+   編集:     task が存在 → PUT /tasks/{id} (hx-put)
+   モーダル (#modal-root) に差し込まれる #}
+
+<div class="modal" role="dialog" aria-modal="true"
+     aria-labelledby="task-form-title">
+
+  {# ─── ヘッダ ─── #}
+  <div class="modal__head">
+    <h2 class="modal__title" id="task-form-title">
+      {% if task %}タスクを編集{% else %}タスクを追加{% endif %}
+    </h2>
+    <button class="modal__close" type="button"
+            @click="close()" aria-label="閉じる">✕</button>
+  </div>
+
+  {# ─── フォームボディ ─── #}
+  <div class="modal__body">
+    {% if task %}
+      {# 編集フォーム: hx-put でタスク更新 #}
+      <form id="task-edit-form"
+            hx-put="/tasks/{{ task.task_id }}"
+            hx-target="#task-list"
+            hx-swap="innerHTML"
+            hx-indicator="#page-loader">
+        <input type="hidden" name="assignee_id" value="{{ task.assignee_id }}">
+    {% else %}
+      {# 新規作成フォーム #}
+      <form id="task-new-form"
+            hx-post="/tasks"
+            hx-target="#task-list"
+            hx-swap="innerHTML"
+            hx-indicator="#page-loader">
+    {% endif %}
+
+      {# エラー表示 #}
+      {% if error %}
+        <div class="alert alert--error" role="alert">{{ error }}</div>
+      {% endif %}
+
+      {# 担当者 (admin のみ表示・編集可) #}
+      <div class="field">
+        <label class="field__label" for="tf-assignee">担当者</label>
+        <select class="field__input" id="tf-assignee" name="assignee_id" required
+                {% if task %}style="display:none"{% endif %}>
+          <option value="">選択してください</option>
+          {% for emp in employees %}
+            <option value="{{ emp.username }}"
+                    {% if task and task.assignee_id == emp.username %}selected
+                    {% endif %}>
+              {{ emp.name }}
+            </option>
+          {% endfor %}
+        </select>
+        {% if task %}
+          <p style="font-size:13px;color:var(--color-ink-2);margin-top:2px">
+            {{ task.assignee_name }}
+          </p>
+        {% endif %}
+      </div>
+
+      {# 作業内容 #}
+      <div class="field">
+        <label class="field__label" for="tf-work">作業内容</label>
+        <input class="field__input" type="text" id="tf-work" name="work"
+               placeholder="例: 給湯器交換工事"
+               value="{{ task.work if task else '' }}"
+               required>
+      </div>
+
+      {# 場所 #}
+      <div class="field">
+        <label class="field__label" for="tf-location">場所</label>
+        <input class="field__input" type="text" id="tf-location" name="location"
+               placeholder="例: 山田様邸"
+               value="{{ task.location if task else '' }}"
+               required>
+      </div>
+
+      {# 予定日 #}
+      <div class="field">
+        <label class="field__label" for="tf-date">予定日</label>
+        <input class="field__input" type="date" id="tf-date" name="scheduled_date"
+               value="{{ task.scheduled_date if task else today }}"
+               required>
+      </div>
+
+      {# ステータス #}
+      <div class="field">
+        <label class="field__label" for="tf-status">ステータス</label>
+        <select class="field__input" id="tf-status" name="status">
+          <option value="pending"
+                  {% if not task or task.status == 'pending' %}selected{% endif %}>未着手</option>
+          <option value="in_progress"
+                  {% if task and task.status == 'in_progress' %}selected{% endif %}>作業中</option>
+        </select>
+      </div>
+
+      {# ─── フッター ─── #}
+      <div class="modal__footer" style="padding:0;margin-top:8px">
+        <button type="button" class="btn btn--secondary" @click="close()">
+          キャンセル
+        </button>
+        <button type="submit" class="btn btn--primary">
+          {% if task %}更新する{% else %}追加する{% endif %}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

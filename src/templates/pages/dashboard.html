@@ -1,0 +1,12 @@
+{# templates/pages/dashboard.html
+   ダッシュボード画面 (admin 専用)
+   app_shell レイアウトを継承する #}
+{% extends "layouts/app_shell.html" %}
+
+{% block title %}ダッシュボード — Gemba One{% endblock %}
+{% block page_css %}dashboard{% endblock %}
+{% block page_js %}dashboard{% endblock %}
+
+{% block content %}
+  {% include "partials/dashboard_content.html" %}
+{% endblock %}

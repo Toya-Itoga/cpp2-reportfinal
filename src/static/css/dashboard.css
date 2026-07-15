@@ -1,0 +1,221 @@
+/* static/css/dashboard.css
+   ダッシュボード画面専用スタイル */
+
+/* ─── ページコンテンツ ─── */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: fadeSlideUp .35s cubic-bezier(.2, .7, .2, 1);
+}
+
+/* ─── KPI カードグリッド ─── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── KPI カード ─── */
+.kpi-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px 24px;
+  border-left: 4px solid transparent;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 26, 54, .10);
+}
+
+.kpi-card--completed {
+  border-left-color: var(--color-completed);
+}
+
+.kpi-card--pending {
+  border-left-color: var(--color-pending);
+}
+
+.kpi-card__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ink-3);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: 10px;
+}
+
+.kpi-card__value {
+  font-size: 36px;
+  font-weight: 900;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--color-ink);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.kpi-card--completed .kpi-card__value { color: var(--color-completed-ink); }
+.kpi-card--pending   .kpi-card__value { color: var(--color-pending-ink); }
+
+.kpi-card__unit {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink-3);
+  margin-left: 4px;
+}
+
+/* ─── セクションヘッダ ─── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-header__title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--color-ink);
+}
+
+/* ─── 従業員進捗カードグリッド ─── */
+.employee-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .employee-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .employee-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── 従業員カード ─── */
+.employee-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.employee-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(16, 26, 54, .10);
+}
+
+.employee-card__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.employee-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.employee-card__name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.employee-card__username {
+  font-size: 11.5px;
+  color: var(--color-ink-3);
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* 進捗バー */
+.employee-card__bar {
+  height: 8px;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.employee-card__bar-seg {
+  height: 100%;
+  transition: width .5s ease;
+}
+
+.employee-card__bar-seg--done     { background: var(--color-completed); }
+.employee-card__bar-seg--progress { background: var(--color-progress); }
+
+/* 統計数値 */
+.employee-card__stats {
+  display: flex;
+  gap: 12px;
+}
+
+.employee-card__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.employee-card__stat-value {
+  font-size: 18px;
+  font-weight: 900;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.employee-card__stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-ink-3);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.employee-card__stat--done     .employee-card__stat-value { color: var(--color-completed-ink); }
+.employee-card__stat--progress .employee-card__stat-value { color: var(--color-progress-ink); }
+.employee-card__stat--pending  .employee-card__stat-value { color: var(--color-pending-ink); }
+
+/* ─── 今日の集計日表示 ─── */
+.dashboard__date-label {
+  font-size: 12px;
+  color: var(--color-ink-3);
+  font-family: 'Roboto Mono', monospace;
+}

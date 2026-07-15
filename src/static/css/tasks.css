@@ -1,0 +1,215 @@
+/* static/css/tasks.css
+   タスク一覧画面専用スタイル */
+
+/* ─── ページヘッダ ─── */
+.tasks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tasks-header__left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tasks-header__count {
+  font-size: 12.5px;
+  color: var(--color-ink-3);
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* ─── タスクカードグリッド ─── */
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  animation: fadeSlideUp .3s cubic-bezier(.2, .7, .2, 1);
+}
+
+@media (max-width: 800px) {
+  .task-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── タスクカード ─── */
+.task-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 18px 20px;
+  border-left: 4px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(16, 26, 54, .10);
+}
+
+.task-card--pending   { border-left-color: var(--color-pending); }
+.task-card--progress  { border-left-color: var(--color-progress); }
+.task-card--completed { border-left-color: var(--color-completed); }
+
+/* 完了済みカードのスタイル */
+.task-card--done {
+  opacity: .72;
+}
+
+.task-card--done .task-card__title {
+  text-decoration: line-through;
+  color: var(--color-ink-3);
+}
+
+/* ヘッダ */
+.task-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.task-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink);
+  line-height: 1.45;
+  flex: 1;
+}
+
+/* メタ情報 */
+.task-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.task-card__assignee {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-ink-2);
+  font-weight: 500;
+}
+
+.task-card__date {
+  font-size: 12px;
+  font-family: 'Roboto Mono', monospace;
+  color: var(--color-ink-3);
+}
+
+/* アクションボタン */
+.task-card__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.task-card__done-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-completed-ink);
+  background: var(--color-completed-bg);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+}
+
+/* ─── フィルタバー ─── */
+.tasks-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tasks-filter-bar__tabs {
+  flex: 1;
+}
+
+/* ─── 完了済みセクション ─── */
+.completed-section {
+  margin-top: 24px;
+}
+
+.completed-section__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--color-bg-outer);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-field);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-ink-2);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  text-align: left;
+}
+
+.completed-section__toggle:hover {
+  background: var(--color-border);
+  border-color: var(--color-ink-4);
+}
+
+.completed-section__count {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: var(--color-ink-3);
+  margin-left: auto;
+}
+
+.completed-section__content {
+  background: var(--color-bg-outer);
+  border: 1.5px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-field) var(--radius-field);
+  padding: 16px;
+}
+
+/* ─── 担当者フィルタ（admin） ─── */
+.assignee-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-ink-2);
+}
+
+.assignee-filter__label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.assignee-filter__select {
+  height: 36px;
+  padding: 0 30px 0 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-field);
+  font-size: 13px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A6784' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+  outline: none;
+}
+
+.assignee-filter__select:focus {
+  border-color: var(--color-primary);
+}

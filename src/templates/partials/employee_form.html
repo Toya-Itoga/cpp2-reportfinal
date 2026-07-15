@@ -1,0 +1,101 @@
+{# templates/partials/employee_form.html
+   従業員 追加・編集 共用フォームフラグメント
+   新規作成: target_user が None → POST /settings/users
+   編集:     target_user が存在 → PUT /settings/users/{username}
+   モーダル (#modal-root) に差し込まれる #}
+
+<div class="modal" role="dialog" aria-modal="true"
+     aria-labelledby="emp-form-title">
+
+  {# ─── ヘッダ ─── #}
+  <div class="modal__head">
+    <h2 class="modal__title" id="emp-form-title">
+      {% if target_user %}従業員を編集{% else %}従業員を追加{% endif %}
+    </h2>
+    <button class="modal__close" type="button"
+            @click="close()" aria-label="閉じる">✕</button>
+  </div>
+
+  {# ─── フォームボディ ─── #}
+  <div class="modal__body">
+    {% if target_user %}
+      {# 編集フォーム #}
+      <form hx-put="/settings/users/{{ target_user.username }}"
+            hx-target="#employee-list"
+            hx-swap="innerHTML"
+            hx-indicator="#page-loader">
+    {% else %}
+      {# 新規作成フォーム #}
+      <form hx-post="/settings/users"
+            hx-target="#employee-list"
+            hx-swap="innerHTML"
+            hx-indicator="#page-loader">
+    {% endif %}
+
+      {# エラー表示 #}
+      {% if error %}
+        <div class="alert alert--error" role="alert">{{ error }}</div>
+      {% endif %}
+
+      {# ユーザー名 (新規時のみ入力可、編集時は読み取り専用) #}
+      <div class="field">
+        <label class="field__label" for="ef-username">ユーザー名</label>
+        {% if target_user %}
+          <input class="field__input" type="text"
+                 id="ef-username" name="username"
+                 value="{{ target_user.username }}"
+                 readonly
+                 style="background:var(--color-bg);color:var(--color-ink-3);cursor:not-allowed">
+          <span class="field__error" style="color:var(--color-ink-3);font-size:11px">
+            ユーザー名は変更できません
+          </span>
+        {% else %}
+          <input class="field__input" type="text"
+                 id="ef-username" name="username"
+                 placeholder="例: tanaka_taro"
+                 required
+                 autocomplete="off">
+        {% endif %}
+      </div>
+
+      {# 氏名 #}
+      <div class="field">
+        <label class="field__label" for="ef-name">氏名</label>
+        <input class="field__input" type="text"
+               id="ef-name" name="name"
+               placeholder="例: 田中 太郎"
+               value="{{ target_user.name if target_user else '' }}"
+               required>
+      </div>
+
+      {# パスワード #}
+      <div class="field">
+        <label class="field__label" for="ef-password">
+          パスワード{% if target_user %}（空欄の場合は変更なし）{% endif %}
+        </label>
+        <input class="field__input" type="password"
+               id="ef-password" name="password"
+               placeholder="{% if target_user %}変更する場合のみ入力{% else %}パスワードを設定{% endif %}"
+               {% if not target_user %}required{% endif %}
+               autocomplete="new-password">
+      </div>
+
+      {# ロール (新規作成時のみ、常に employee 固定) #}
+      {% if not target_user %}
+        <input type="hidden" name="role" value="employee">
+      {% endif %}
+
+      {# ─── フッター ─── #}
+      <div class="modal__footer" style="padding:0;margin-top:8px">
+        <button type="button" class="btn btn--secondary" @click="close()">
+          キャンセル
+        </button>
+        <button type="submit" class="btn btn--primary">
+          {% if target_user %}更新する{% else %}追加する{% endif %}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
