@@ -1,7 +1,7 @@
 # src/routers/tasks.py
 # タスク一覧・CRUD ルータ (管理者・従業員共用)
 
-from fastapi import APIRouter, Depends, Form, Request, Response
+from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from typing import Optional
@@ -63,10 +63,10 @@ def task_list(
     }
 
     is_htmx = request.headers.get("HX-Request")
-    # フィルタリクエスト（HX-Requestかつtask-listへのswap）はtask_listフラグメントを返す
+    # フィルタリクエスト（HX-Requestかつtask-list/completed-listへのswap）はtask_listフラグメントを返す
     # ナビゲーション（HX-Requestかつmain-contentへのswap）はcontent部分を返す
     htmx_target = request.headers.get("HX-Target", "")
-    if is_htmx and htmx_target == "task-list":
+    if is_htmx and htmx_target in ("task-list", "completed-list"):
         template = "partials/task_list.html"
     elif is_htmx and htmx_target == "main-content":
         template = "partials/tasks_content.html"
@@ -101,7 +101,6 @@ def new_task_form(
 @router.post("/tasks", response_class=HTMLResponse)
 async def create_task_handler(
     request: Request,
-    response: Response,
     assignee_id: str = Form(...),
     work: str = Form(...),
     location: str = Form(...),
@@ -123,9 +122,6 @@ async def create_task_handler(
     employees = list_employees()
     create_task(data, created_by=user["username"], employees=employees)
 
-    # モーダルを閉じるイベントを発火
-    response.headers["HX-Trigger"] = "close-modal"
-
     tasks = get_tasks_for_user(user=user)
     ctx = {
         "request": request,
@@ -135,7 +131,10 @@ async def create_task_handler(
         "employees": employees,
         "today": today_str(),
     }
-    return templates.TemplateResponse("partials/task_list.html", ctx)
+    # TemplateResponse に直接ヘッダーを付与してモーダルを閉じる
+    resp = templates.TemplateResponse("partials/task_list.html", ctx)
+    resp.headers["HX-Trigger"] = "close-modal"
+    return resp
 
 
 # ---------------------------------------------------------------------------
@@ -169,7 +168,6 @@ def edit_task_form(
 async def update_task_handler(
     task_id: str,
     request: Request,
-    response: Response,
     assignee_id: str = Form(...),
     work: Optional[str] = Form(None),
     location: Optional[str] = Form(None),
@@ -190,9 +188,6 @@ async def update_task_handler(
     employees = list_employees()
     update_task(task_id, assignee_id, data, employees)
 
-    # モーダルを閉じるイベントを発火
-    response.headers["HX-Trigger"] = "close-modal"
-
     tasks = get_tasks_for_user(user=user)
     ctx = {
         "request": request,
@@ -202,7 +197,9 @@ async def update_task_handler(
         "employees": employees,
         "today": today_str(),
     }
-    return templates.TemplateResponse("partials/task_list.html", ctx)
+    resp = templates.TemplateResponse("partials/task_list.html", ctx)
+    resp.headers["HX-Trigger"] = "close-modal"
+    return resp
 
 
 # ---------------------------------------------------------------------------
@@ -233,7 +230,6 @@ def confirm_complete_form(
 async def complete_task_handler(
     task_id: str,
     request: Request,
-    response: Response,
     assignee_id: str = Form(...),
     user: dict = Depends(get_current_user),
 ):
@@ -243,9 +239,6 @@ async def complete_task_handler(
     従業員は自分のタスクのみ完了可能。
     """
     complete_task(task_id, assignee_id, current_user=user)
-
-    # モーダルを閉じるイベントを発火
-    response.headers["HX-Trigger"] = "close-modal"
 
     employees = list_employees() if user.get("role") == "admin" else []
     tasks = get_tasks_for_user(user=user)
@@ -257,4 +250,6 @@ async def complete_task_handler(
         "employees": employees,
         "today": today_str(),
     }
-    return templates.TemplateResponse("partials/task_list.html", ctx)
+    resp = templates.TemplateResponse("partials/task_list.html", ctx)
+    resp.headers["HX-Trigger"] = "close-modal"
+    return resp

@@ -1,5 +1,5 @@
 # src/schema/user.py
-# ユーザー関連 Pydantic スキーマ (Pydantic v1)
+# ユーザー関連 Pydantic スキーマ (Pydantic v2)
 
 from pydantic import BaseModel
 from typing import Optional

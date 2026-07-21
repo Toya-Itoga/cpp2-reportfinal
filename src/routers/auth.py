@@ -64,6 +64,17 @@ async def login(
 
     # ロールに応じてリダイレクト先を決定
     redirect_url = "/dashboard" if user["role"] == "admin" else "/tasks"
+
+    # HTMXリクエストの場合: HX-Redirect ヘッダでブラウザ全体をリダイレクトさせる
+    # (302リダイレクトはHTMXがswapしてしまうため使用しない)
+    is_htmx = request.headers.get("HX-Request")
+    if is_htmx:
+        resp = Response(status_code=200)
+        resp.headers["HX-Redirect"] = redirect_url
+        resp.set_cookie("access_token", token, httponly=True, max_age=6 * 3600)
+        return resp
+
+    # 非HTMXリクエスト（通常フォームPOST）: 従来通り302リダイレクト
     resp = RedirectResponse(url=redirect_url, status_code=302)
     resp.set_cookie("access_token", token, httponly=True, max_age=6 * 3600)
     return resp

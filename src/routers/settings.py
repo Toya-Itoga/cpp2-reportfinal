@@ -1,7 +1,7 @@
 # src/routers/settings.py
 # 設定ルータ (ユーザー管理・パスワード変更)
 
-from fastapi import APIRouter, Depends, Form, Request, Response
+from fastapi import APIRouter, Depends, Form, Request
 from fastapi.exceptions import HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -68,7 +68,6 @@ def new_user_form(
 @router.post("/settings/users", response_class=HTMLResponse)
 async def create_user_handler(
     request: Request,
-    response: Response,
     username: str = Form(...),
     name: str = Form(...),
     password: str = Form(...),
@@ -90,17 +89,14 @@ async def create_user_handler(
     try:
         create_user(data)
     except ValueError as e:
-        # ユーザー名重複エラー
+        # ユーザー名重複エラー（モーダルは閉じない）
         ctx = {
             "request": request,
             "user": user,
             "error": str(e),
-            "form_data": data.dict(),
+            "form_data": data.model_dump(),
         }
-        return templates.TemplateResponse("partials/user_form.html", ctx)
-
-    # モーダルを閉じるイベントを発火
-    response.headers["HX-Trigger"] = "close-modal"
+        return templates.TemplateResponse("partials/employee_form.html", ctx)
 
     users = list_active_users()
     ctx = {
@@ -108,7 +104,9 @@ async def create_user_handler(
         "user": user,
         "users": users,
     }
-    return templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp = templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp.headers["HX-Trigger"] = "close-modal"
+    return resp
 
 
 # ---------------------------------------------------------------------------
@@ -140,7 +138,6 @@ def edit_user_form(
 async def update_user_handler(
     username: str,
     request: Request,
-    response: Response,
     name: Optional[str] = Form(None),
     password: Optional[str] = Form(None),
     user: dict = Depends(require_admin),
@@ -155,16 +152,15 @@ async def update_user_handler(
     )
     update_user(username, data)
 
-    # モーダルを閉じるイベントを発火
-    response.headers["HX-Trigger"] = "close-modal"
-
     users = list_active_users()
     ctx = {
         "request": request,
         "user": user,
         "users": users,
     }
-    return templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp = templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp.headers["HX-Trigger"] = "close-modal"
+    return resp
 
 
 # ---------------------------------------------------------------------------
@@ -202,7 +198,6 @@ def delete_confirm_form(
 async def deactivate_user_handler(
     username: str,
     request: Request,
-    response: Response,
     user: dict = Depends(require_admin),
 ):
     """指定されたユーザーを無効化し、更新されたユーザー一覧フラグメントを返す。
@@ -217,16 +212,15 @@ async def deactivate_user_handler(
 
     deactivate_user(username)
 
-    # モーダルを閉じるイベントを発火
-    response.headers["HX-Trigger"] = "close-modal"
-
     users = list_active_users()
     ctx = {
         "request": request,
         "user": user,
         "users": users,
     }
-    return templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp = templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp.headers["HX-Trigger"] = "close-modal"
+    return resp
 
 
 # ---------------------------------------------------------------------------
@@ -235,7 +229,6 @@ async def deactivate_user_handler(
 @router.post("/settings/password", response_class=HTMLResponse)
 async def change_password_handler(
     request: Request,
-    response: Response,
     current_password: str = Form(...),
     new_password: str = Form(...),
     confirm_password: str = Form(...),
@@ -275,12 +268,11 @@ async def change_password_handler(
             "partials/pw_change_result.html", ctx
         )
 
-    # 成功時はモーダルを閉じるイベントを発火
-    response.headers["HX-Trigger"] = "close-modal"
-
     ctx = {
         "request": request,
         "user": user,
         "success": "パスワードを変更しました",
     }
-    return templates.TemplateResponse("partials/password_form.html", ctx)
+    resp = templates.TemplateResponse("partials/password_form.html", ctx)
+    resp.headers["HX-Trigger"] = "close-modal"
+    return resp

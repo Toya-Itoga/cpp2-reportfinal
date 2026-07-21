@@ -42,10 +42,11 @@ def get_tasks_for_user(
             include_completed=include_completed,
         )
     else:
-        # 従業員: 自分のタスクのみ取得
+        # 従業員: 自分のタスクのみ取得（status フィルタも渡す）
         tasks = list_tasks_for_employee(
             assignee_id=username,
             include_completed=include_completed,
+            status_filter=status,
         )
 
     return tasks

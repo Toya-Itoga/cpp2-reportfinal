@@ -4,7 +4,7 @@
 import os
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from fastapi.exceptions import HTTPException
 from mangum import Mangum
 
@@ -41,14 +41,31 @@ def root():
 # ---------------------------------------------------------------------------
 @app.exception_handler(401)
 async def unauthorized_handler(request: Request, exc: HTTPException):
-    """未認証アクセスをログインページへリダイレクト"""
-    return RedirectResponse(url="/login")
+    """未認証アクセスをログインページへリダイレクト。
+
+    HTMXリクエストの場合: 302を追跡してswapしてしまうため、
+    代わりに 200 + HX-Redirect ヘッダを返してブラウザ全体をリダイレクトさせる。
+    通常リクエストの場合: 従来通り 302 リダイレクト。
+    """
+    if request.headers.get("HX-Request"):
+        resp = Response(status_code=200)
+        resp.headers["HX-Redirect"] = "/login"
+        return resp
+    return RedirectResponse(url="/login", status_code=302)
 
 
 @app.exception_handler(403)
 async def forbidden_handler(request: Request, exc: HTTPException):
-    """権限不足アクセスをタスク一覧ページへリダイレクト"""
-    return RedirectResponse(url="/tasks")
+    """権限不足アクセスをタスク一覧ページへリダイレクト。
+
+    HTMXリクエストの場合: 200 + HX-Redirect ヘッダを返す。
+    通常リクエストの場合: 従来通り 302 リダイレクト。
+    """
+    if request.headers.get("HX-Request"):
+        resp = Response(status_code=200)
+        resp.headers["HX-Redirect"] = "/tasks"
+        return resp
+    return RedirectResponse(url="/tasks", status_code=302)
 
 
 # ---------------------------------------------------------------------------

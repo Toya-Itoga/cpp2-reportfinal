@@ -1,5 +1,5 @@
 # src/schema/task.py
-# タスク関連 Pydantic スキーマ (Pydantic v1)
+# タスク関連 Pydantic スキーマ (Pydantic v2)
 
 from pydantic import BaseModel
 from typing import Optional

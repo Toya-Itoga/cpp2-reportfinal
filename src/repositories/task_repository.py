@@ -164,16 +164,25 @@ def list_tasks(
         items.extend(response.get("Items", []))
 
     # プレフィックスフィルタリング
+    # status=completed のとき DONE# のみを対象とし、status フィールドとの二重条件を避ける
+    # それ以外は TASK# を対象とし、include_completed=True の場合は DONE# も追加する
     result = []
     for item in items:
         pk: str = item.get("task_id", "")
-        if pk.startswith(TASK_PREFIX):
+        is_task = pk.startswith(TASK_PREFIX)
+        is_done = pk.startswith(DONE_PREFIX)
+
+        if status_filter == "completed":
+            # 完了済み指定: DONE# プレフィックスのみで判断（status フィールド再チェック不要）
+            if is_done:
+                result.append(_normalize_task(item))
+        elif is_task:
             result.append(_normalize_task(item))
-        elif include_completed and pk.startswith(DONE_PREFIX):
+        elif include_completed and is_done:
             result.append(_normalize_task(item))
 
-    # ステータスフィルタ
-    if status_filter:
+    # ステータスフィルタ（completed 指定時はプレフィックスで絞り込み済みのためスキップ）
+    if status_filter and status_filter != "completed":
         result = [t for t in result if t.get("status") == status_filter]
 
     # 担当者フィルタ
@@ -186,14 +195,19 @@ def list_tasks(
 
 
 def list_tasks_for_employee(
-    assignee_id: str, include_completed: bool = False
+    assignee_id: str,
+    include_completed: bool = False,
+    status_filter: Optional[str] = None,
 ) -> list:
     """指定された従業員のタスク一覧を返す。
 
     include_completed=True の場合は完了済みタスクも含める。
+    status_filter を指定するとステータスで絞り込む。
     """
     return list_tasks(
-        assignee_filter=assignee_id, include_completed=include_completed
+        assignee_filter=assignee_id,
+        include_completed=include_completed,
+        status_filter=status_filter,
     )
 
 
