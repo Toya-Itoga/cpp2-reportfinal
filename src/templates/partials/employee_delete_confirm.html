@@ -20,14 +20,11 @@
     </p>
 
     {# 対象ユーザー情報 #}
-    <div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
-      <span class="avatar avatar--lg">{{ target_user.name[0] if target_user.name else '?' }}</span>
-      <div>
-        <p style="font-size:14px;font-weight:700;color:var(--color-ink)">{{ target_user.name }}</p>
-        <p style="font-size:12px;color:var(--color-ink-3);font-family:'Roboto Mono',monospace">
-          @{{ target_user.username }}
-        </p>
-      </div>
+    <div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;margin-bottom:14px">
+      <p style="font-size:14px;font-weight:700;color:var(--color-ink)">{{ target_user.name }}</p>
+      <p style="font-size:12px;color:var(--color-ink-3);font-family:'Roboto Mono',monospace">
+        @{{ target_user.username }}
+      </p>
     </div>
 
     {# 注意文 #}
@@ -49,7 +46,6 @@
             hx-post="/settings/users/{{ target_user.username }}/deactivate"
             hx-target="#employee-list"
             hx-swap="innerHTML"
-            hx-indicator="#page-loader"
             aria-label="{{ target_user.name }}を削除する">
       削除する
     </button>

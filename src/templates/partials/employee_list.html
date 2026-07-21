@@ -18,12 +18,7 @@
         {% for u in users %}
           <tr class="data-table__row">
             {# 氏名 #}
-            <td class="data-table__cell">
-              <div style="display:flex;align-items:center;gap:8px">
-                <span class="avatar avatar--sm">{{ u.name[0] if u.name else '?' }}</span>
-                <span style="font-weight:700">{{ u.name }}</span>
-              </div>
-            </td>
+            <td class="data-table__cell data-table__cell--name">{{ u.name }}</td>
             {# ユーザー名 #}
             <td class="data-table__cell u-mono" style="font-size:12.5px;color:var(--color-ink-3)">
               @{{ u.username }}
@@ -43,7 +38,6 @@
                         hx-get="/settings/users/{{ u.username }}/edit"
                         hx-target="#modal-root"
                         hx-swap="innerHTML"
-                        hx-indicator="#page-loader"
                         aria-label="{{ u.name }}を編集">
                   編集
                 </button>
@@ -54,7 +48,6 @@
                           hx-get="/settings/users/{{ u.username }}/delete-confirm"
                           hx-target="#modal-root"
                           hx-swap="innerHTML"
-                          hx-indicator="#page-loader"
                           aria-label="{{ u.name }}を削除">
                     削除
                   </button>

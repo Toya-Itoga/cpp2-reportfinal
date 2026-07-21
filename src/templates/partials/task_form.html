@@ -23,16 +23,14 @@
       <form id="task-edit-form"
             hx-put="/tasks/{{ task.task_id }}"
             hx-target="#task-list"
-            hx-swap="innerHTML"
-            hx-indicator="#page-loader">
+            hx-swap="innerHTML">
         <input type="hidden" name="assignee_id" value="{{ task.assignee_id }}">
     {% else %}
       {# 新規作成フォーム #}
       <form id="task-new-form"
             hx-post="/tasks"
             hx-target="#task-list"
-            hx-swap="innerHTML"
-            hx-indicator="#page-loader">
+            hx-swap="innerHTML">
     {% endif %}
 
       {# エラー表示 #}

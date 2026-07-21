@@ -9,7 +9,7 @@
   loadCompleted() {
     if (!this.completedOpen) {
       this.completedOpen = true;
-      htmx.ajax('GET', '/tasks?include_completed=true', { target: '#completed-list', swap: 'innerHTML' });
+      htmx.ajax('GET', '/tasks?status=completed', { target: '#completed-list', swap: 'innerHTML' });
     } else {
       this.completedOpen = false;
     }
@@ -19,7 +19,8 @@
   {# ─── ページヘッダ ─── #}
   <div class="tasks-header">
     <div class="tasks-header__left">
-      <h1 style="font-size:19px;font-weight:900;color:var(--color-ink)">タスク一覧</h1>
+      <h1 class="tasks-header__title">タスク一覧</h1>
+      <p class="tasks-header__count">{{ tasks | length }} 件</p>
     </div>
   </div>
 
@@ -121,7 +122,6 @@
           hx-get="/tasks/new"
           hx-target="#modal-root"
           hx-swap="innerHTML"
-          hx-indicator="#page-loader"
           aria-label="タスクを追加">
     +
   </button>

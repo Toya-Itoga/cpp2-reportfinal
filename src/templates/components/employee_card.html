@@ -9,18 +9,10 @@
 
 <a href="/tasks?assignee={{ emp.username }}"
    class="employee-card"
-   hx-get="/tasks?assignee={{ emp.username }}"
-   hx-target="#main-content"
-   hx-push-url="true"
-   hx-swap="innerHTML"
-   hx-indicator="#page-loader"
    aria-label="{{ emp.name }}のタスク一覧を表示">
 
   {# ─── ヘッダ ─── #}
   <div class="employee-card__head">
-    <div class="employee-card__avatar" aria-hidden="true">
-      {{ emp.name[0] if emp.name else '?' }}
-    </div>
     <div>
       <div class="employee-card__name">{{ emp.name }}</div>
       <div class="employee-card__username">@{{ emp.username }}</div>

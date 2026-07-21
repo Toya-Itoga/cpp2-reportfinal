@@ -22,14 +22,12 @@
       {# 編集フォーム #}
       <form hx-put="/settings/users/{{ target_user.username }}"
             hx-target="#employee-list"
-            hx-swap="innerHTML"
-            hx-indicator="#page-loader">
+            hx-swap="innerHTML">
     {% else %}
       {# 新規作成フォーム #}
       <form hx-post="/settings/users"
             hx-target="#employee-list"
-            hx-swap="innerHTML"
-            hx-indicator="#page-loader">
+            hx-swap="innerHTML">
     {% endif %}
 
       {# エラー表示 #}
