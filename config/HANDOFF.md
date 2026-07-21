@@ -226,9 +226,9 @@ templates/
 - **フィルタリング（サーバー側）**:
   - `admin`: Task テーブルを全件スキャンして全タスク表示。`?assignee=` 指定時は絞り込み。
   - `employee`: `SK == 自分の username` で Query し、自分のタスクのみ表示。
-- **項目**: タスクは「**作業内容**（`work`）」と「**場所**（`location`）」を別項目として保持する（例: 作業内容＝「給湯器交換工事」、場所＝「山田様邸」）。カード表示は従来どおり「作業内容 ／ 場所」の1行で結合して見せる（`title = work + ' ／ ' + location` をサーバー側もしくはテンプレートで生成）。
+- **項目**: タスクは「**作業内容**（`work`）」と「**作業場所**（`location`）」を別項目として保持する（例: 作業内容＝「給湯器交換工事」、場所＝「山田様邸」）。カード表示は従来どおり「作業内容 ／ 場所」の1行で結合して見せる（`title = work + ' ／ ' + location` をサーバー側もしくはテンプレートで生成）。
 - **表示（採用: 2a 案 = タスクカードグリッドに確定）**:
-  - タスクカード: 作業内容／場所・担当者名（アイコンなし）・予定日・ステータスバッジ・操作ボタン。
+  - タスクカード: 作業内容／作業場所・担当者名（アイコンなし）・予定日・ステータスバッジ・操作ボタン。
   - ステータス別の左ボーダー色（pending=橙 / in_progress=青 / completed=緑）。
 - **デフォルト表示・フィルタ**:
   - **初期表示では完了済みタスクを表示しない**。一覧は `status in (pending, in_progress)` のタスクのみを表示する。
@@ -244,7 +244,7 @@ templates/
 ### 3.4 タスク追加・編集ダイアログ（admin のみ・流用）
 
 - **取得**: `GET /tasks/new`（空フォーム）/ `GET /tasks/{id}/edit`（値入り）。同一 `partials/task_form.html` を流用し、`action` と見出しだけ切替。
-- **入力項目**: 担当者（select・active な employee 一覧）/ **作業内容（text）と場所（text）を別フィールドとして入力** / 予定日（date）/ ステータス（select）。
+- **入力項目**: 担当者（select・active な employee 一覧）/ **作業内容（text）と作業場所（text）を別フィールドとして入力** / 予定日（date）/ ステータス（select）。
 - **保存**: 追加=`POST /tasks`、更新=`PUT /tasks/{id}`（HTMX は `hx-post` + `_method` か `hx-put`）。成功後は `#task-list` を再描画し、モーダルを閉じる（`HX-Trigger: close-modal` レスポンスヘッダ or Alpine イベント）。
 - **キャンセル**: モーダルを閉じるのみ（サーバー通信なし）。
 - **デフォルト**: 新規作成時 `status = pending`。
@@ -470,7 +470,7 @@ def settings(user = Depends(require_admin)): ...
 `user_id(UUID)` / `password_hash(bcrypt)` / `role(admin|employee)` / `name` / `created_at(ISO8601)` / `is_active(bool)`
 
 ### Task（PK: `TASK#<task_id>` / SK: `assignee_id`＝担当者 username）
-`work`（作業内容）/ `location`（場所）/ `assignee_name` / `scheduled_date(YYYY-MM-DD)` / `status(pending|in_progress|completed)` / `created_by` / `created_at` / `updated_at`
+`work`（作業内容）/ `location`（作業場所）/ `assignee_name` / `scheduled_date(YYYY-MM-DD)` / `status(pending|in_progress|completed)` / `created_by` / `created_at` / `updated_at`
 
 > 一覧・カード表示用のタイトルはテンプレート側で `work + ' ／ ' + location` として結合する（`title` フィールドとして DB に保持しない）。
 

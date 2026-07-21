@@ -2,81 +2,61 @@
 
 ## コンテキスト
 - CLAUDE.md
-- config/requirements.md
+- config/requirements.md（designs/Gemba One 画面デザイン.dc.html を正本として再生成したもの。
+  旧モック・旧デザインファイルは廃止済み）
+- config/HANDOFF.md
 - src/
 
+## 背景
+- デザインファイルを1つに統一し、HANDOFF.mdを再生成した。
+- 統一前は「モック」と「画面デザイン」の2ファイルを参照していたため、
+  細部の差異（コンポーネントの見た目・余白・状態表示など）が
+  実装に混在し、タスク一覧・設定画面のスタイル崩れの原因になっていた。
+- 今回のタスクは、新しいHANDOFF.mdを唯一の正としてフロントエンド実装を
+  総点検・再整合させること。
+
 ## タスク
-- config/requirements.mdとconfig/HANDOFF.mdのデータ構造を参照し、
-- scripts/setup_local_db.pyを実装してください。
+- ログイン画面をブラウザ全体に合わせたレイアウトに変更
 
-### 1. テーブル作成
+### 現状
+- ログイン画面が中央に固定サイズのカード（角丸・影付き）として
+  表示されており、周囲に余白の背景（グレー）が見えている
 
-以下の2テーブルをDynamoDB Localに作成する。
-既に存在する場合はスキップ（delete→recreateはしない）。
+### 変更後の期待デザイン
+- 左右2カラムのパネルがブラウザの画面幅・高さいっぱいに広がる
+  レイアウトに変更する（参考: キャリアナビAIのログイン画面）
+- 左パネル（ブランドパネル）: 左端から画面の約40〜50%幅、
+  上下は画面いっぱい（100vh）
+- 右パネル（フォーム）: 残りの幅、上下は画面いっぱい（100vh）
+- カード全体を囲む角丸・影・中央寄せの余白は削除し、
+  ブラウザウィンドウ全体を使う構成にする
 
-**Userテーブル**
-- テーブル名: 環境変数 USER_TABLE_NAME
-- PK: username（String）
-- SKなし
+### 修正内容
+- static/css/login.css を修正する:
+  1. .login-page（外枠コンテナ）を
+     width: 100vw; height: 100vh; margin: 0; padding: 0;
+     background: なし（左右パネルが画面を埋めるため不要）
+     に変更する
+  2. .login-card（現在のカード要素）から
+     max-width指定・border-radius・box-shadow・
+     中央寄せのmargin を削除し、
+     width: 100%; height: 100%; display: flex; を
+     維持したまま画面いっぱいに広がるようにする
+  3. .login-card__brand（左パネル）と
+     .login-card__form-panel（右パネル）の幅比率は
+     現状のデザイントークンに準拠しつつ、
+     高さが100vhになるよう調整する
+  4. 右パネル内のフォーム部分は、現状通り中央寄せ
+     （縦横center）のまま維持してよい
 
-**Taskテーブル**
-- テーブル名: 環境変数 TASK_TABLE_NAME
-- PK: task_id（String）
-- SK: assignee_id（String）
-- BillingMode: PAY_PER_REQUEST
-
-### 2. 初期データ投入
-
-以下のダミーデータを投入する。
-既に同じPKのアイテムが存在する場合はスキップ。
-
-**Userテーブル**
-
-| username | name | role | password |
-|---|---|---|---|
-| tanaka | 田中 社長 | admin | admin1234 |
-| sato | 佐藤 健一 | employee | emp1234 |
-| suzuki | 鈴木 大輔 | employee | emp1234 |
-| takahashi | 高橋 修 | employee | emp1234 |
-
-※passwordはbcryptでハッシュ化してpassword_hashとして保存すること
-※user_idはuuid4で生成
-※created_at はISO8601形式（datetime.utcnow().isoformat()）
-※is_active = True
-
-**Taskテーブル**
-
-未完了タスク（PK: TASK#<task_id>）を5件：
-
-| title | assignee | scheduled_date | status |
-|---|---|---|---|
-| 給湯器交換工事 | sato | 今日の日付 | in_progress |
-| エアコン新設 / 3F事務所 | suzuki | 今日の日付 | pending |
-| 排水管高圧洗浄 / 佐々木ビル | sato | 今日の日付 | pending |
-| ボイラー点検 / 中村工場 | takahashi | 今日の日付 | in_progress |
-| 水道メーター交換 / 田村邸 | suzuki | 明日の日付 | pending |
-
-完了済みタスク（PK: DONE#<task_id>）を2件：
-
-| title | assignee | scheduled_date | status |
-|---|---|---|---|
-| 水漏れ修理 / 田村マンション201 | takahashi | 今日の日付 | completed |
-| トイレ詰まり修理 / 山田様邸 | sato | 昨日の日付 | completed |
-
-※task_idはuuid4で生成
-※assignee_nameはassignee（username）から名前を引いてセットすること
-※created_by = tanaka
-※created_at / updated_at はISO8601形式
-
-### 3. 実行確認
-
-スクリプト末尾に投入結果のサマリーを出力すること。
-✅ Userテーブル作成済み
-✅ Taskテーブル作成済み
-✅ ユーザー 4件 投入完了
-✅ タスク 7件 投入完了
+### 期待する結果
+- ブラウザのウィンドウサイズを変えても、ログイン画面の
+  左右パネルが常に画面全体を覆う
+- 画面の外側にグレーの余白が見えなくなる
+- レスポンシブ対応（768px未満はモバイルレイアウト）は
+  維持すること（HANDOFF.md 1.3節参照）
 
 ## 注意事項
-- DynamoDB LocalのエンドポイントはDYNAMODB_ENDPOINTから読むこと
-- .envを読み込むこと（python-dotenv使用）
-- 既存データを削除・上書きしないこと
+- ロゴ・タイトル・フォームの内容自体は変更しないこと
+- モバイル表示時のレイアウト（サイドバー非表示・
+  ヘッダー構成）に影響を与えないこと
