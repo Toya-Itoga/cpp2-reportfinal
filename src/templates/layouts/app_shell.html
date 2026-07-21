@@ -43,6 +43,7 @@
     flex: 1;
     padding: 28px 32px;
     overflow-x: hidden;
+    animation: fadeSlideUp .15s ease;
   }
   @media (max-width: 768px) {
     .app-shell__sidebar { display: none; }
@@ -60,9 +61,8 @@
 <div class="app-shell">
 
   {# ─── サイドバー（固定・差し替え対象外） ─── #}
-  <aside class="app-shell__sidebar"
-         style="animation: sidebarIn .4s cubic-bezier(.2,.7,.2,1)">
-    {{ sidebar(role=role, active=active_page | default('')) }}
+  <aside class="app-shell__sidebar">
+    {{ sidebar(role=role, active=active_page | default(''), user=user) }}
   </aside>
 
   {# ─── メインエリア ─── #}
@@ -118,6 +118,7 @@ function modalRoot() {
     },
   };
 }
+
 </script>
 {% endblock %}
 

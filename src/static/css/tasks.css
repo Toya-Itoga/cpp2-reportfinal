@@ -17,6 +17,12 @@
   gap: 4px;
 }
 
+.tasks-header__title {
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--color-ink);
+}
+
 .tasks-header__count {
   font-size: 12.5px;
   color: var(--color-ink-3);

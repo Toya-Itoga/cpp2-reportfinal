@@ -17,10 +17,7 @@
 
   {# ─── メタ情報 (担当者 + 日付) ─── #}
   <div class="task-card__meta">
-    <span class="task-card__assignee">
-      <span class="avatar avatar--sm" aria-hidden="true">{{ task.assignee_name[0] if task.assignee_name else '?' }}</span>
-      {{ task.assignee_name }}
-    </span>
+    <span class="task-card__assignee">{{ task.assignee_name }}</span>
     <time class="task-card__date u-mono" datetime="{{ task.scheduled_date }}">
       {{ task.scheduled_date }}
     </time>
@@ -34,7 +31,6 @@
               hx-get="/tasks/{{ task.task_id }}/confirm?assignee_id={{ task.assignee_id }}"
               hx-target="#modal-root"
               hx-swap="innerHTML"
-              hx-indicator="#page-loader"
               aria-label="{{ task.title }}を完了する">
         完了
       </button>
@@ -44,7 +40,6 @@
                 hx-get="/tasks/{{ task.task_id }}/edit?assignee_id={{ task.assignee_id }}"
                 hx-target="#modal-root"
                 hx-swap="innerHTML"
-                hx-indicator="#page-loader"
                 aria-label="{{ task.title }}を編集する">
           編集
         </button>

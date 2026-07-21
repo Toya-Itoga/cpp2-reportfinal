@@ -70,6 +70,12 @@
   display: none;
 }
 
+/* ─── 従業員テーブル 氏名セル ─── */
+.data-table__cell--name {
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
 /* ─── 役割バッジ ─── */
 .role-badge {
   display: inline-block;
