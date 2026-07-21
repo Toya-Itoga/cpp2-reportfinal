@@ -3,23 +3,16 @@
 
 /* ─── ページ全体レイアウト ─── */
 .login-page {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-bg-outer);
-  padding: 24px;
+  overflow: hidden;
 }
 
 /* ─── ログインカード（2カラム） ─── */
 .login-card {
   display: flex;
-  width: 900px;
-  max-width: 100%;
-  height: 520px;
-  border-radius: 14px;
-  box-shadow: 0 24px 60px rgba(16, 26, 54, .22);
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
   animation: loginIn .5s cubic-bezier(.2, .7, .2, 1);
 }
 
@@ -193,17 +186,25 @@
 
 /* ─── モバイル対応 ─── */
 @media (max-width: 640px) {
+  .login-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
   .login-card {
     flex-direction: column;
     height: auto;
+    min-height: 100vh;
   }
 
   .login-card__brand {
-    padding: 32px 24px;
-    min-height: 160px;
+    padding: 40px 24px;
+    min-height: 200px;
   }
 
   .login-card__form-panel {
+    flex: 1;
     padding: 32px 24px;
   }
 }
