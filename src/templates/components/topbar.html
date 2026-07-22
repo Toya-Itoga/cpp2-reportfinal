@@ -8,12 +8,18 @@
   {# ─── 左：ページタイトル ─── #}
   <h1 class="topbar__title">{{ title }}</h1>
 
-  {# ─── 右：今日の日付 ─── #}
+  {# ─── 右：今日の日付 + モバイル専用ログアウトボタン ─── #}
   <div class="topbar__actions">
     <time class="topbar__date u-mono">
       {# Jinja2 の now() は使えないため、テンプレート変数 today から表示 #}
       {{ today | default('') }}
     </time>
+
+    {# PC 版はサイドバー下部にログアウトボタンがあるため非表示
+       モバイル（≤768px）ではサイドバーが隠れるのでここに表示 #}
+    <form action="/logout" method="post" class="topbar__logout-form">
+      <button type="submit" class="topbar__logout-btn">ログアウト</button>
+    </form>
   </div>
 </div>
 
@@ -46,9 +52,45 @@
   color: var(--color-ink-2);
 }
 
+/* PC 版では非表示（サイドバーにログアウトボタンあり） */
+.topbar__logout-form {
+  display: none;
+}
+
+/* ログアウトボタン本体（藍色背景・白文字で視認性を確保） */
+.topbar__logout-btn {
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--color-navy);
+  border: 1px solid var(--color-navy);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.topbar__logout-btn:hover {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: #fff;
+}
+
+.topbar__logout-btn:active {
+  background: var(--color-danger-dark);
+  border-color: var(--color-danger-dark);
+}
+
 @media (max-width: 768px) {
   .topbar { padding: 0 16px; }
   .topbar__title { font-size: 16px; }
+
+  /* モバイルではログアウトボタンを表示、日付は省略して横幅を確保 */
+  .topbar__date { display: none; }
+  .topbar__logout-form { display: block; }
 }
 </style>
 {% endmacro %}

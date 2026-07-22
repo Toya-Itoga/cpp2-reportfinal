@@ -48,7 +48,20 @@
   @media (max-width: 768px) {
     .app-shell__sidebar { display: none; }
     .app-shell__main    { margin-left: 0; }
-    .app-shell__body    { padding: 16px; }
+    /* ヘッダーをビューポート上部に固定する
+       sticky はフレックスコンテナ内で意図通り動作しない場合があるため fixed を使用 */
+    .app-shell__header  {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+    }
+    /* fixed で flow から外れたヘッダー分のスペースを確保 */
+    .app-shell__body    {
+      padding: 16px;
+      padding-top: calc(var(--topbar-h) + 16px);
+    }
   }
   /* Alpine.js x-cloak 対応 */
   [x-cloak] { display: none !important; }
@@ -118,6 +131,37 @@ function modalRoot() {
     },
   };
 }
+
+/**
+ * 通常の<a href>によるページ遷移時にローディングスピナーを表示する。
+ * HTMXを使わないナビゲーション（サイドバー・従業員カード等）では
+ * htmx:beforeRequest が発火しないため、クリックイベントで手動表示する。
+ * HTMX属性付きリンク・アンカーリンク・外部URLは除外する。
+ */
+document.addEventListener('click', function(e) {
+  // 修飾キー・中クリック（新規タブ開き）は通常挙動に任せる
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+  var link = e.target.closest('a[href]');
+  if (!link) return;
+
+  var href = link.getAttribute('href');
+  // アンカー・javascript:・外部URL・target 指定・HTMX リンクは除外
+  if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+  if (href.startsWith('http://') || href.startsWith('https://')) return;
+  if (link.target && link.target !== '_self') return;
+  if (link.matches('[hx-get],[hx-post],[hx-put],[hx-delete],[hx-patch]')) return;
+
+  e.preventDefault();
+  var loader = document.getElementById('page-loader');
+  if (loader) {
+    // CSS transition の 200ms 遅延を上書きしてスピナーを即座に表示する
+    loader.style.transition = 'none';
+    loader.style.opacity = '1';
+    loader.style.pointerEvents = 'auto';
+  }
+  window.location.href = href;
+});
 
 </script>
 {% endblock %}
