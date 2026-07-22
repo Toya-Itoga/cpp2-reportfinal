@@ -44,7 +44,6 @@ def dashboard(
     by_employee = _aggregate_by_employee(employees, today_tasks)
 
     ctx = {
-        "request": request,
         "user": user,
         "role": user["role"],
         "today_total": len(today_tasks),
@@ -59,7 +58,7 @@ def dashboard(
     # HTMX ナビゲーション時はコンテンツ部分のみ返す
     is_htmx = request.headers.get("HX-Request")
     template = "partials/dashboard_content.html" if is_htmx else "pages/dashboard.html"
-    return templates.TemplateResponse(template, ctx)
+    return templates.TemplateResponse(request=request, name=template, context=ctx)
 
 
 # ---------------------------------------------------------------------------

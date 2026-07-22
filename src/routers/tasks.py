@@ -49,7 +49,6 @@ def task_list(
     employees = list_employees() if user.get("role") == "admin" else []
 
     ctx = {
-        "request": request,
         "user": user,
         "role": user["role"],
         "tasks": tasks,
@@ -72,7 +71,7 @@ def task_list(
         template = "partials/tasks_content.html"
     else:
         template = "pages/tasks.html"
-    return templates.TemplateResponse(template, ctx)
+    return templates.TemplateResponse(request=request, name=template, context=ctx)
 
 
 # ---------------------------------------------------------------------------
@@ -87,12 +86,15 @@ def new_task_form(
     employees = list_employees()
 
     ctx = {
-        "request": request,
         "user": user,
         "employees": employees,
         "today": today_str(),
     }
-    return templates.TemplateResponse("partials/task_form.html", ctx)
+    return templates.TemplateResponse(
+        request=request,
+        name="partials/task_form.html",
+        context=ctx
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -124,7 +126,6 @@ async def create_task_handler(
 
     tasks = get_tasks_for_user(user=user)
     ctx = {
-        "request": request,
         "user": user,
         "role": user["role"],
         "tasks": tasks,
@@ -132,7 +133,11 @@ async def create_task_handler(
         "today": today_str(),
     }
     # TemplateResponse に直接ヘッダーを付与してモーダルを閉じる
-    resp = templates.TemplateResponse("partials/task_list.html", ctx)
+    resp = templates.TemplateResponse(
+        request=request,
+        name="partials/task_list.html",
+        context=ctx
+    )
     resp.headers["HX-Trigger"] = "close-modal"
     return resp
 
@@ -152,13 +157,16 @@ def edit_task_form(
     employees = list_employees()
 
     ctx = {
-        "request": request,
         "user": user,
         "task": task,
         "employees": employees,
         "today": today_str(),
     }
-    return templates.TemplateResponse("partials/task_form.html", ctx)
+    return templates.TemplateResponse(
+        request=request,
+        name="partials/task_form.html",
+        context=ctx
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -190,14 +198,17 @@ async def update_task_handler(
 
     tasks = get_tasks_for_user(user=user)
     ctx = {
-        "request": request,
         "user": user,
         "role": user["role"],
         "tasks": tasks,
         "employees": employees,
         "today": today_str(),
     }
-    resp = templates.TemplateResponse("partials/task_list.html", ctx)
+    resp = templates.TemplateResponse(
+        request=request,
+        name="partials/task_list.html",
+        context=ctx
+    )
     resp.headers["HX-Trigger"] = "close-modal"
     return resp
 
@@ -216,11 +227,14 @@ def confirm_complete_form(
     task = get_task_by_id(task_id, assignee_id)
 
     ctx = {
-        "request": request,
         "user": user,
         "task": task,
     }
-    return templates.TemplateResponse("partials/task_confirm.html", ctx)
+    return templates.TemplateResponse(
+        request=request,
+        name="partials/task_confirm.html",
+        context=ctx
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -243,13 +257,16 @@ async def complete_task_handler(
     employees = list_employees() if user.get("role") == "admin" else []
     tasks = get_tasks_for_user(user=user)
     ctx = {
-        "request": request,
         "user": user,
         "role": user["role"],
         "tasks": tasks,
         "employees": employees,
         "today": today_str(),
     }
-    resp = templates.TemplateResponse("partials/task_list.html", ctx)
+    resp = templates.TemplateResponse(
+        request=request,
+        name="partials/task_list.html",
+        context=ctx
+    )
     resp.headers["HX-Trigger"] = "close-modal"
     return resp

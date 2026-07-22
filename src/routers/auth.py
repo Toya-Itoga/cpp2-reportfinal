@@ -21,7 +21,9 @@ templates = Jinja2Templates(directory="templates")
 def login_page(request: Request):
     """ログインページを表示する。"""
     return templates.TemplateResponse(
-        "pages/login.html", {"request": request}
+        request=request,
+        name="pages/login.html",
+        context={}
     )
 
 
@@ -50,14 +52,19 @@ async def login(
         or not verify_password(password, user["password_hash"])
     ):
         error_msg = "ユーザー名またはパスワードが正しくありません"
-        ctx = {"request": request, "error": error_msg}
         is_htmx = request.headers.get("HX-Request")
 
         if is_htmx:
             return templates.TemplateResponse(
-                "partials/login_form.html", ctx
+                request=request,
+                name="partials/login_form.html",
+                context={"error": error_msg}
             )
-        return templates.TemplateResponse("pages/login.html", ctx)
+        return templates.TemplateResponse(
+            request=request,
+            name="pages/login.html",
+            context={"error": error_msg}
+        )
 
     # JWT トークンを生成
     token = create_token(user["username"], user["role"], user["name"])

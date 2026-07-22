@@ -37,7 +37,6 @@ def settings_page(
     users = list_active_users()
 
     ctx = {
-        "request": request,
         "user": user,
         "role": user["role"],
         "users": users,
@@ -46,7 +45,7 @@ def settings_page(
     }
     is_htmx = request.headers.get("HX-Request")
     template = "partials/settings_content.html" if is_htmx else "pages/settings.html"
-    return templates.TemplateResponse(template, ctx)
+    return templates.TemplateResponse(request=request, name=template, context=ctx)
 
 
 # ---------------------------------------------------------------------------
@@ -58,8 +57,12 @@ def new_user_form(
     user: dict = Depends(require_admin),
 ):
     """ユーザー新規作成モーダル用フラグメントを返す。管理者専用。"""
-    ctx = {"request": request, "user": user}
-    return templates.TemplateResponse("partials/employee_form.html", ctx)
+    ctx = {"user": user}
+    return templates.TemplateResponse(
+        request=request,
+        name="partials/employee_form.html",
+        context=ctx
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -91,20 +94,26 @@ async def create_user_handler(
     except ValueError as e:
         # ユーザー名重複エラー（モーダルは閉じない）
         ctx = {
-            "request": request,
             "user": user,
             "error": str(e),
             "form_data": data.model_dump(),
         }
-        return templates.TemplateResponse("partials/employee_form.html", ctx)
+        return templates.TemplateResponse(
+            request=request,
+            name="partials/employee_form.html",
+            context=ctx
+        )
 
     users = list_active_users()
     ctx = {
-        "request": request,
         "user": user,
         "users": users,
     }
-    resp = templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp = templates.TemplateResponse(
+        request=request,
+        name="partials/employee_list.html",
+        context=ctx
+    )
     resp.headers["HX-Trigger"] = "close-modal"
     return resp
 
@@ -124,11 +133,14 @@ def edit_user_form(
         raise HTTPException(status_code=404, detail="ユーザーが見つかりません")
 
     ctx = {
-        "request": request,
         "user": user,
         "target_user": target_user,
     }
-    return templates.TemplateResponse("partials/employee_form.html", ctx)
+    return templates.TemplateResponse(
+        request=request,
+        name="partials/employee_form.html",
+        context=ctx
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -154,11 +166,14 @@ async def update_user_handler(
 
     users = list_active_users()
     ctx = {
-        "request": request,
         "user": user,
         "users": users,
     }
-    resp = templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp = templates.TemplateResponse(
+        request=request,
+        name="partials/employee_list.html",
+        context=ctx
+    )
     resp.headers["HX-Trigger"] = "close-modal"
     return resp
 
@@ -180,12 +195,13 @@ def delete_confirm_form(
         raise HTTPException(status_code=404, detail="ユーザーが見つかりません")
 
     ctx = {
-        "request": request,
         "user": user,
         "target_user": target_user,
     }
     return templates.TemplateResponse(
-        "partials/employee_delete_confirm.html", ctx
+        request=request,
+        name="partials/employee_delete_confirm.html",
+        context=ctx
     )
 
 
@@ -214,11 +230,14 @@ async def deactivate_user_handler(
 
     users = list_active_users()
     ctx = {
-        "request": request,
         "user": user,
         "users": users,
     }
-    resp = templates.TemplateResponse("partials/employee_list.html", ctx)
+    resp = templates.TemplateResponse(
+        request=request,
+        name="partials/employee_list.html",
+        context=ctx
+    )
     resp.headers["HX-Trigger"] = "close-modal"
     return resp
 
@@ -243,12 +262,13 @@ async def change_password_handler(
     # 新パスワードの一致確認
     if new_password != confirm_password:
         ctx = {
-            "request": request,
             "user": user,
             "error": "新しいパスワードと確認用パスワードが一致しません",
         }
         return templates.TemplateResponse(
-            "partials/pw_change_result.html", ctx
+            request=request,
+            name="partials/pw_change_result.html",
+            context=ctx
         )
 
     # パスワード変更実行
@@ -260,19 +280,23 @@ async def change_password_handler(
 
     if not success:
         ctx = {
-            "request": request,
             "user": user,
             "error": "現在のパスワードが正しくありません",
         }
         return templates.TemplateResponse(
-            "partials/pw_change_result.html", ctx
+            request=request,
+            name="partials/pw_change_result.html",
+            context=ctx
         )
 
     ctx = {
-        "request": request,
         "user": user,
         "success": "パスワードを変更しました",
     }
-    resp = templates.TemplateResponse("partials/password_form.html", ctx)
+    resp = templates.TemplateResponse(
+        request=request,
+        name="partials/password_form.html",
+        context=ctx
+    )
     resp.headers["HX-Trigger"] = "close-modal"
     return resp
