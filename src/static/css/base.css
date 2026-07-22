@@ -9,6 +9,13 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* モバイルブラウザのタップハイライト（青い光）を無効化 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 html {
