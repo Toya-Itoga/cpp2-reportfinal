@@ -198,13 +198,40 @@
     min-height: 100vh;
   }
 
+  /* ブランドパネル: 成長を抑えてフォームエリアに縦スペースを譲る */
   .login-card__brand {
-    padding: 40px 24px;
-    min-height: 200px;
+    flex: 0 0 auto;
+    min-height: 160px;
+    padding: 22px 24px;
   }
 
+  /* ロゴアイコンを一回り小さく */
+  .login-card__logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .login-card__logo-icon::after {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ブランド名フォントを縮小 */
+  .login-card__logo-name {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  /* コピーライトの余白を詰める */
+  .login-card__logo-sub {
+    font-size: 11px;
+  }
+
+  /* フォームパネルが残りスペースをすべて占める */
   .login-card__form-panel {
     flex: 1;
-    padding: 32px 24px;
+    padding: 28px 24px;
   }
 }
