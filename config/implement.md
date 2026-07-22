@@ -16,64 +16,78 @@
   総点検・再整合させること。
 
 ## タスク
-- 画面遷移時のスピナー表示（デバッグ用の一時的遅延）
+- TemplateResponseの呼び出し形式を新形式に統一する
 
-### 背景
-- ログイン画面→ダッシュボード画面の遷移時はスピナーが
-  表示されるが、ダッシュボード⇔タスク一覧⇔設定間の
-  画面遷移ではスピナーが表示されない
-- ローカルuvicorn環境ではレスポンスが速すぎて、
-  スピナーが表示される条件（前回実装した200ms遅延の
-  閾値）に達していない可能性がある。実際に
-  スピナー表示ロジックが機能しているか確認したい
+### 症状
+- Lambda環境で /login にアクセスすると
+  TypeError: unhashable type: 'dict' が発生する
+  （ローカルでも過去に同様のエラーが発生し、
+  当時はrequirements.txtのバージョン固定
+  （starlette==0.41.3等）で一時的に回避していた）
 
-### 確認方法（一時的な変更）
-1. src/routers/dashboard.py, tasks.py, settings.py の
-   各GETハンドラに、確認用として一時的に
-   `import time; time.sleep(1)` 等の遅延を追加する
-   （本番運用ではこの遅延は不要なので、確認後は
-   必ず削除すること）
-2. 遅延を入れた状態で、ダッシュボード→タスク一覧→設定と
-   画面遷移し、スピナーが表示されるか確認する
+### 根本原因
+- src/routers/auth.py内のTemplateResponse呼び出しが
+  古い形式（第一引数にテンプレート名、第二引数に
+  {"request": request, ...}のdictを渡す形式）のままになっている
+```python
+  # 旧形式（問題あり）
+  templates.TemplateResponse("pages/login.html", {"request": request})
+```
+- 新しいバージョンのStarlette/Jinja2ではこの形式が
+  内部のテンプレートキャッシュキー生成で
+  TypeError: unhashable type: 'dict' を引き起こす
 
-### 確認結果に応じた対応
-- **スピナーが表示される場合**:
-  → スピナー機構自体は正常に動作している。
-    一時的な time.sleep を全て削除し、
-    「ローカル環境では速すぎて見えないだけ」という
-    結論で対応完了とする
-- **スピナーが表示されない場合**:
-  → 画面遷移のリンク（サイドバーのナビゲーション、
-    ダッシュボードの従業員カード等）に
-    hx-indicator="#page-loader" が付与されているか
-    確認する。以前「画面間遷移は通常の<a href>に統一する」
-    修正を行った際、hx-indicator の指定が
-    HTMXの部分swapに依存していたため、通常リンクに
-    変更したことでスピナー表示の仕組みが
-    機能しなくなっている可能性がある
-  → 通常の<a href>によるフルページ遷移の場合、
-    ブラウザ標準のページ読み込みインジケータに
-    切り替わるため、HTMXのhx-indicator機構が
-    そもそも働かない点に注意する。この場合は
-    以下のいずれかで対応する:
-    a. ブラウザ標準のローディング表示に任せ、
-       独自スピナーの表示は諦める
-    b. リンク先への遷移前に、JavaScriptで
-       明示的にスピナーを表示してから遷移する
-       （軽量な実装: リンクのclickイベントで
-       #page-loaderを表示してから
-       window.location.href で遷移）
+### 修正内容
+- src/配下の全てのルータファイル
+  （routers/auth.py, dashboard.py, tasks.py, settings.py）で、
+  TemplateResponseの呼び出しを全て新形式に統一する:
+```python
+  # 新形式（正しい）
+  return templates.TemplateResponse(
+      request=request,
+      name="pages/login.html",
+      context={}  # requestを含めない、追加のcontext変数のみ
+  )
+```
+- 具体的には auth.py の3箇所を以下のように修正する:
+  1. login_page関数:
+```python
+     return templates.TemplateResponse(
+         request=request,
+         name="pages/login.html",
+         context={}
+     )
+```
+  2. login関数（認証失敗時・HTMX）:
+```python
+     return templates.TemplateResponse(
+         request=request,
+         name="partials/login_form.html",
+         context={"error": error_msg}
+     )
+```
+  3. login関数（認証失敗時・通常）:
+```python
+     return templates.TemplateResponse(
+         request=request,
+         name="pages/login.html",
+         context={"error": error_msg}
+     )
+```
+- 他のルータファイル（dashboard.py, tasks.py, settings.py）に
+  同様の旧形式のTemplateResponse呼び出しが残っていないか
+  全て確認し、同じ新形式に統一すること
 
-### 期待する結果
-- 画面遷移の仕組み（通常リンク vs HTMX）に応じて、
-  スピナー表示の実態を明確にした上で、
-  適切な方法で「重い場合はローディングが分かる」
-  状態にする
-- 確認用に追加した time.sleep は最終的に
-  必ず削除すること
+### requirements.txtのバージョン固定を解除
+- 以前ローカルの問題を回避するために固定した
+  starlette / jinja2 / fastapi のバージョン指定
+  （requirements.txtにピン留めがあれば）を確認し、
+  コード修正により不要になった場合は最新の安定版に
+  戻してよい（Lambda側のレイヤーと揃える）
 
 ## 注意事項
-- 本番相当の確認が終わったら、デバッグ用の遅延コードが
-  残っていないことを必ず確認すること
-- ダイアログ開閉（HTMXの部分swap）にはスピナーを
-  表示しない、という以前の仕様は維持すること
+- 修正後、ローカル（uvicorn）とLambda（本番）の
+  両方で /login にアクセスし、正常にログイン画面が
+  表示されることを確認すること
+- 認証失敗時のエラーメッセージ表示、HTMX時の
+  フォーム差し替えも正しく動作することを確認すること
